@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\hannah\Source\Repos\Group_Project\GroupProject\App.xaml
-21713697755
+31777445889
 
-7-969030033
+141282245841
 13-1505183044
-MainWindow.xaml;SearchWindow.xaml;
+Items\wndItems.xaml;Main\wndMain.xaml;Search\wndSearch.xaml;
 
-True
+False
 
