@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:GroupProject"
         mc:Ignorable="d"
         Title="EditItemsWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+	<Grid>
+		</Grid>
 </Window>

@@ -24,5 +24,30 @@ namespace GroupProject
 		{
 			InitializeComponent();
 		}
+
+		private void addButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void updateButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void deleteButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void UpdateMenuItem_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void SearchMenuItem_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
 	}
 }

@@ -6,15 +6,15 @@
         xmlns:local="clr-namespace:GroupProject"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-		<DockPanel>
-			<Menu DockPanel.Dock="Top">
-				<MenuItem Header="Menu">
-					<MenuItem Header="Update" />
-					<MenuItem Header="Search Invoice" />
-				</MenuItem>
-			</Menu>
-			<TextBox AcceptsReturn="True" />
-		</DockPanel>
+	<Grid>
+		<Menu Margin="0,0,0,0.5">
+			<MenuItem Header="Menu">
+				<MenuItem Header="Update" Click="UpdateMenuItem_Click"/>
+				<MenuItem Header="Search Invoice" Click="SearchMenuItem_Click"/>
+			</MenuItem>
+		</Menu>
+		<Button x:Name="addButton" Content="Add" HorizontalAlignment="Left" Margin="52,135,0,0" VerticalAlignment="Top" Width="120" Click="addButton_Click" Height="26" RenderTransformOrigin="-0.377,0.327"/>
+		<Button x:Name="updateButton" Content="Update" HorizontalAlignment="Left" Margin="52,194,0,0" VerticalAlignment="Top" Width="120" Click="updateButton_Click" Height="26"/>
+		<Button x:Name="deleteButton" Content="Delete" HorizontalAlignment="Left" Margin="52,250,0,0" VerticalAlignment="Top" Width="120" Click="deleteButton_Click" Height="26"/>
 	</Grid>
 </Window>
