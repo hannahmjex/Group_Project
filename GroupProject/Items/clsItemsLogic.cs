@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace GroupProject.Items
 {
-	class clsItemsLogic
-	{
-	}
+    /// <summary>
+    /// All items logic for pulling in the database and editing all fields appropiately
+    /// </summary>
+    class clsItemsLogic
+    {
+
+    }
 }

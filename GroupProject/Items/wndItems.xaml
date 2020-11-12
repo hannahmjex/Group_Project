@@ -1,12 +1,19 @@
-﻿<Window x:Class="GroupProject.EditItemsWindow"
+﻿<Window x:Class="GroupProject.wndItems"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GroupProject"
         mc:Ignorable="d"
-        Title="EditItemsWindow" Height="450" Width="800">
+        Title="Edit Items Window" Height="450" Width="800">
     <Grid>
-        
+        <TextBox x:Name="descriptionTextBox" HorizontalAlignment="Left" Height="23" Margin="52,71,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="priceTextBox" HorizontalAlignment="Left" Height="23" Margin="52,150,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="descriptionLabel" Content="Description" HorizontalAlignment="Left" Margin="52,33,0,0" VerticalAlignment="Top" Height="38" Width="91" FontSize="14" RenderTransformOrigin="0.472,-0.194"/>
+        <Label x:Name="priceLabel" Content="Price" HorizontalAlignment="Left" Margin="52,122,0,0" VerticalAlignment="Top" Height="28" Width="50" FontSize="14"/>
+        <Button x:Name="addButton" Content="Add" HorizontalAlignment="Left" Margin="52,218,0,0" VerticalAlignment="Top" Width="120" Click="addButton_Click" Height="27" RenderTransformOrigin="-0.377,0.327"/>
+        <Button x:Name="updateButton" Content="Update" HorizontalAlignment="Left" Margin="52,270,0,0" VerticalAlignment="Top" Width="120" Click="updateButton_Click" Height="27"/>
+        <Button x:Name="deleteButton" Content="Delete" HorizontalAlignment="Left" Margin="52,323,0,0" VerticalAlignment="Top" Width="120" Click="deleteButton_Click" Height="27"/>
+        <DataGrid x:Name="itemsDataGrid" HorizontalAlignment="Left" Height="333" Margin="214,28,0,0" VerticalAlignment="Top" Width="536" IsReadOnly="True" VerticalScrollBarVisibility="Auto" />
     </Grid>
 </Window>
