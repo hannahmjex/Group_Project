@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace GroupProject.Search
 {
+	/// <summary>
+	/// All future logic for the search window.
+	/// </summary>
 	class clsSearchLogic
 	{
 	}

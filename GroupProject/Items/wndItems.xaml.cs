@@ -10,9 +10,9 @@ namespace GroupProject
 	/// <summary>
 	/// Interaction logic for EditItemsWindow.xaml
 	/// </summary>
-	public partial class wndItems : Window
+	public partial class EditItemsWindow : Window
 	{
-        public wndItems()
+        public EditItemsWindow()
         {
             InitializeComponent();
         }
