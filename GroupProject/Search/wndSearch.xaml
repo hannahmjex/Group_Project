@@ -11,6 +11,9 @@
         <ComboBox x:Name="comboBoxInvoiceNum" HorizontalAlignment="Left" Margin="45,115,0,0" VerticalAlignment="Top" Width="133" Height="31"/>
         <ComboBox x:Name="comboBoxInvoiceDate" HorizontalAlignment="Left" Margin="45,182,0,0" VerticalAlignment="Top" Width="133" Height="31"/>
         <ComboBox x:Name="comboBoxInvoiceTotalCharge" HorizontalAlignment="Left" Margin="45,248,0,0" VerticalAlignment="Top" Width="133" Height="31"/>
+        <Label x:Name="lblInvoiceNum" Content="Invoice Number" HorizontalAlignment="Left" Margin="66,84,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblInvoiceDate" Content="Invoice Date" HorizontalAlignment="Left" Margin="66,156,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblInvoiceTotalCost" Content="Total Cost" HorizontalAlignment="Left" Margin="66,218,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
