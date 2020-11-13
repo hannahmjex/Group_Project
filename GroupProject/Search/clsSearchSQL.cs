@@ -150,5 +150,25 @@ namespace GroupProject.Search
                 throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
         }
+
+        /// <summary>
+        /// Returns select all invoices SQL Query
+        /// </summary>
+        /// <returns></returns>
+        public string GetAllInvoices()
+        {
+            return "SELECT * FROM Invoices";
+        }
+
+        /// THIS MAY NOT BE NEEDED
+        /// <summary>
+        /// Returns query string that will get an invoice out of the database by its invoice number.
+        /// </summary>
+        /// <param name="invoiceNum"></param>
+        /// <returns></returns>
+        public string GetInvoiceByInvoiceNum(string invoiceNum)
+        {
+            return $"SELECT * FROM Invoices WHERE InvoicNum = {invoiceNum}";
+        }
     }
 }
