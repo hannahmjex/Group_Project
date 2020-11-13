@@ -13,7 +13,8 @@
 				<MenuItem Header="Search Invoice" Click="SearchMenuItem_Click" Margin="0,0,-3,0"/>
 			</MenuItem>
 		</Menu>
-		<ComboBox Margin="232,44,375,350.5" IsEnabled="False">
+		<DataGrid Margin="250,108,203,22.5"/>
+		<ComboBox Margin="250,44,357,350.5" IsEnabled="False">
 			<Label Content="Diamond Fashion Ring" Height="27" Width="138"/>
 			<Label Content="Precious Stone Ring" Height="24" Width="90"/>
 			<Label Content="Semi Precious Stone Ring" Height="27" Width="148"/>
@@ -41,7 +42,7 @@
 			<Label Content="Platinum" Height="27" Width="90"/>
 			<Label Content="GTS Platinum" Height="27" Width="148"/>
 		</ComboBox>
-		<Button x:Name="addItemButton" IsEnabled="False" Content="Add Item" HorizontalAlignment="Left" Margin="446,44,0,0" VerticalAlignment="Top" Width="120" Click="deleteButton_Click" Height="28"/>
+		<Button x:Name="addItemButton" IsEnabled="False" Content="Add Item" HorizontalAlignment="Left" Margin="472,44,0,0" VerticalAlignment="Top" Width="120" Click="deleteButton_Click" Height="28"/>
 		<Button x:Name="newButton" Content="New" HorizontalAlignment="Left" Margin="52,135,0,0" VerticalAlignment="Top" Width="120" Click="newButton_Click" Height="26" RenderTransformOrigin="-0.377,0.327"/>
 		<Button x:Name="updateButton" IsEnabled="False" Content="Update" HorizontalAlignment="Left" Margin="52,194,0,0" VerticalAlignment="Top" Width="120" Click="updateButton_Click" Height="26"/>
 		<Button x:Name="deleteButton" IsEnabled="False" Content="Delete" HorizontalAlignment="Left" Margin="52,258,0,0" VerticalAlignment="Top" Width="120" Click="deleteButton_Click" Height="26"/>
