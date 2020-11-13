@@ -1,17 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace GroupProject
 {
@@ -26,12 +13,19 @@ namespace GroupProject
 		EditItemsWindow wndItems;
 
 		/// <summary>
+		/// wndSearch class
+		/// </summary>
+		SearchWindow wndSearch;
+
+		/// <summary>
 		/// Constructor for Main Window
 		/// </summary>
 		public MainWindow()
 		{
 			InitializeComponent();
+			Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
 			wndItems = new EditItemsWindow();
+			wndSearch = new SearchWindow();
 		}
 
 		/// <summary>
@@ -71,12 +65,20 @@ namespace GroupProject
 		/// <summary>
 		/// This method is called when the Update menu option is clicked
 		/// It allows the user to update a def table that contains the items
+		/// This button can only be clicked when an invoice is not being edited
+		/// or if a new invoice is not being entered
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void UpdateMenuItem_Click(object sender, RoutedEventArgs e)
 		{
+			//if invoice is being edited/added
+			//DO NOTHING
 
+			//else
+			this.Hide();
+			wndItems.ShowDialog();
+			this.Show();
 		}
 
 		/// <summary>
@@ -87,7 +89,9 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void SearchMenuItem_Click(object sender, RoutedEventArgs e)
 		{
-
+			this.Hide();
+			wndSearch.ShowDialog();
+			this.Show();
 		}
 
 		/// <summary>
