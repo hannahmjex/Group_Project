@@ -25,7 +25,13 @@ namespace GroupProject
 			InitializeComponent();
 		}
 
-		private void addButton_Click(object sender, RoutedEventArgs e)
+		/// <summary>
+		/// This method is called when the new invoice button is clicked
+		/// it enables the rest of the screen
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void newButton_Click(object sender, RoutedEventArgs e)
 		{
 
 		}

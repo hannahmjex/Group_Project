@@ -10,11 +10,40 @@
 		<Menu Margin="0,0,0,0.5">
 			<MenuItem Header="Menu">
 				<MenuItem Header="Update" Click="UpdateMenuItem_Click"/>
-				<MenuItem Header="Search Invoice" Click="SearchMenuItem_Click"/>
+				<MenuItem Header="Search Invoice" Click="SearchMenuItem_Click" Margin="0,0,-3,0"/>
 			</MenuItem>
 		</Menu>
-		<Button x:Name="addButton" Content="Add" HorizontalAlignment="Left" Margin="52,135,0,0" VerticalAlignment="Top" Width="120" Click="addButton_Click" Height="26" RenderTransformOrigin="-0.377,0.327"/>
-		<Button x:Name="updateButton" Content="Update" HorizontalAlignment="Left" Margin="52,194,0,0" VerticalAlignment="Top" Width="120" Click="updateButton_Click" Height="26"/>
-		<Button x:Name="deleteButton" Content="Delete" HorizontalAlignment="Left" Margin="52,250,0,0" VerticalAlignment="Top" Width="120" Click="deleteButton_Click" Height="26"/>
+		<ComboBox Margin="232,44,375,350.5" IsEnabled="False">
+			<Label Content="Diamond Fashion Ring" Height="27" Width="138"/>
+			<Label Content="Precious Stone Ring" Height="24" Width="90"/>
+			<Label Content="Semi Precious Stone Ring" Height="27" Width="148"/>
+			<Label Content="Pearl Ring" Height="27" Width="90"/>
+			<Label Content="Mothers Ring" Height="27" Width="90"/>
+			<Label Content="Black Hills Gold Ring" Height="27" Width="130"/>
+			<Label Content="Sterling Silver Ring" Height="27" Width="114"/>
+			<Label Content="Wrap" Height="27" Width="90"/>
+			<Label Content="Solitare" Height="27" Width="90"/>
+			<Label Content="Chain" Height="27" Width="90"/>
+			<Label Content="Rope Chain" Height="27" Width="90"/>
+			<Label Content="Pendant" Height="27" Width="90"/>
+			<Label Content="Earrings" Height="27" Width="90"/>
+			<Label Content="Charm Bracelet" Height="27" Width="148"/>
+			<Label Content="Tennis Bracelet" Height="27" Width="148"/>
+			<Label Content="Miscellaneous" Height="27" Width="148"/>
+			<Label Content="Trio Set" Height="27" Width="90"/>
+			<Label Content="Band" Height="27" Width="90"/>
+			<Label Content="GTS Band" Height="27" Width="90"/>
+			<Label Content="Bracelet" Height="27" Width="90"/>
+			<Label Content="Diamond Necklace" Height="27" Width="148"/>
+			<Label Content="GTS Ring w/Stones" Height="27" Width="148"/>
+			<Label Content="Bridal" Height="27" Width="90"/>
+			<Label Content="Anniversary Band" Height="27" Width="148"/>
+			<Label Content="Platinum" Height="27" Width="90"/>
+			<Label Content="GTS Platinum" Height="27" Width="148"/>
+		</ComboBox>
+		<Button x:Name="addItemButton" IsEnabled="False" Content="Add Item" HorizontalAlignment="Left" Margin="446,44,0,0" VerticalAlignment="Top" Width="120" Click="deleteButton_Click" Height="28"/>
+		<Button x:Name="newButton" Content="New" HorizontalAlignment="Left" Margin="52,135,0,0" VerticalAlignment="Top" Width="120" Click="newButton_Click" Height="26" RenderTransformOrigin="-0.377,0.327"/>
+		<Button x:Name="updateButton" IsEnabled="False" Content="Update" HorizontalAlignment="Left" Margin="52,194,0,0" VerticalAlignment="Top" Width="120" Click="updateButton_Click" Height="26"/>
+		<Button x:Name="deleteButton" IsEnabled="False" Content="Delete" HorizontalAlignment="Left" Margin="52,258,0,0" VerticalAlignment="Top" Width="120" Click="deleteButton_Click" Height="26"/>
 	</Grid>
 </Window>
