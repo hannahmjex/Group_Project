@@ -6,7 +6,17 @@ using System.Threading.Tasks;
 
 namespace GroupProject.Main
 {
+	/// <summary>
+	/// All logic for adding, deleting, saving, editing invoices/items will live here
+	/// </summary>
 	class clsMainLogic
 	{
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		public clsMainLogic()
+		{
+
+		}
 	}
 }
