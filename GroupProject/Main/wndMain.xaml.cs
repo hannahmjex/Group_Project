@@ -10,7 +10,7 @@ namespace GroupProject
 		/// <summary>
 		/// wndItems class
 		/// </summary>
-		EditItemsWindow wndItems;
+		wndItems wndItems;
 
 		/// <summary>
 		/// wndSearch class
@@ -24,7 +24,7 @@ namespace GroupProject
 		{
 			InitializeComponent();
 			Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
-			wndItems = new EditItemsWindow();
+			wndItems = new wndItems();
 			wndSearch = new SearchWindow();
 		}
 
