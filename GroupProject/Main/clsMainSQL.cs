@@ -9,18 +9,57 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace GroupProject.Main
+namespace GroupProject
 {
-	class clsMainSQL
+	public class clsMainSQL
 	{
+		/// <summary>
+		/// Values to be returned
+		/// </summary>
+		int returnValues;
+
+		/// <summary>
+		/// database class
+		/// </summary>
+		clsDataAccess db;
+
+		/// <summary>
+		/// data set class
+		/// </summary>
+		DataSet ds;
+
+		///<summary>
+		///main logic class
+		/// </summary>
+		clsMainLogic mainLogic;
+
+		/// <summary>
+		/// constructor
+		/// </summary>
+		public clsMainSQL()
+		{
+			returnValues = 0;
+			db = new clsDataAccess();
+			ds = new DataSet();
+			mainLogic = new clsMainLogic();
+		}
+		
 		#region SQL Statement Methods
 		/// <summary>
 		/// Query to get all item info from Item Desc
 		/// </summary>
 		/// <returns></returns>
-		public string SelectFromItemDesc()
+		public List<string> SelectFromItemDesc()
 		{
-			return "SELECT ItemCode, ItemDesc, Cost FROM ItemDesc";
+			ds = db.ExecuteSQLStatement("SELECT ItemCode, ItemDesc, Cost FROM ItemDesc", ref returnValues);
+
+			for (int i = 0; i < returnValues; i++)
+			{
+				mainLogic.ItemCode = ds.Tables[0].Rows[i]["ItemCode"].ToString();
+				mainLogic.ItemDescription = ds.Tables[0].Rows[i]["ItemDesc"].ToString();
+				mainLogic.ItemCost = ds.Tables[0].Rows[i]["Cost"].ToString();
+			}
+			return mainLogic.Items;
 		}
 
 		/// <summary>

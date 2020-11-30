@@ -18,6 +18,11 @@ namespace GroupProject
 		SearchWindow wndSearch;
 
 		/// <summary>
+		/// main window sql class
+		/// </summary>
+		clsMainLogic mainLogic;
+
+		/// <summary>
 		/// Constructor for Main Window
 		/// </summary>
 		public MainWindow()
@@ -26,6 +31,8 @@ namespace GroupProject
 			Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
 			wndItems = new wndItems();
 			wndSearch = new SearchWindow();
+			mainLogic = new clsMainLogic();
+			cboItemSelection.ItemsSource = mainLogic.GetItems();
 		}
 
 		/// <summary>
@@ -36,7 +43,11 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void newButton_Click(object sender, RoutedEventArgs e)
 		{
-
+			//enable other features
+			cboItemSelection.IsEnabled = true;
+			addItemButton.IsEnabled = true;
+			editButton.IsEnabled = true;
+			saveButton.IsEnabled = true;
 		}
 
 		/// <summary>
@@ -125,6 +136,17 @@ namespace GroupProject
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void deleteButton_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		/// <summary>
+		/// This method is called when the item selection is changed
+		/// It dispalys the cost of the selected item
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void cboItemSelection_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
 
 		}
