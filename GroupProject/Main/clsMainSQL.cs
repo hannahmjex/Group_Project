@@ -1,5 +1,7 @@
-﻿using System;
+﻿using GroupProject.Main;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
@@ -28,11 +30,6 @@ namespace GroupProject
 		/// </summary>
 		DataSet ds;
 
-		///<summary>
-		///main logic class
-		/// </summary>
-		clsMainLogic mainLogic;
-
 		/// <summary>
 		/// constructor
 		/// </summary>
@@ -41,7 +38,6 @@ namespace GroupProject
 			returnValues = 0;
 			db = new clsDataAccess();
 			ds = new DataSet();
-			mainLogic = new clsMainLogic();
 		}
 		
 		#region SQL Statement Methods
@@ -49,19 +45,32 @@ namespace GroupProject
 		/// Query to get all item info from Item Desc
 		/// </summary>
 		/// <returns></returns>
-		public List<clsMainLogic> SelectFromItemDesc()
+		public ObservableCollection<Item> SelectFromItemDesc()
 		{
+
+			// Create local invoices collection
+			ObservableCollection<Item> items = new ObservableCollection<Item>();
+
+			// Get all items from the database.
 			ds = db.ExecuteSQLStatement("SELECT ItemCode, ItemDesc, Cost FROM ItemDesc", ref returnValues);
 
-			for (int i = 0; i < returnValues; i++)
+			// Iterate over rows
+			for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
 			{
-				clsMainLogic items = new clsMainLogic();
-				items.ItemCode = ds.Tables[0].Rows[i][0].ToString();
-				items.ItemDescription = ds.Tables[0].Rows[i][1].ToString();
-				items.ItemCost = ds.Tables[0].Rows[i][2].ToString();
-				mainLogic.Items.Add(items);
+				// Grab data from their columns for each row
+				string itemCode = ds.Tables[0].Rows[i][0].ToString();
+				string itemDescription = ds.Tables[0].Rows[i][1].ToString();
+				string itemCost = ds.Tables[0].Rows[i][2].ToString();
+
+				// Create new local item object
+				Item item = new Item(itemCode, itemDescription, itemCost);
+
+				// Add newly created item object to local collection of items.
+				items.Add(item);
 			}
-			return mainLogic.Items;
+
+			// Return items
+			return items;
 		}
 
 		/// <summary>

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using GroupProject.Main;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Reflection;
@@ -14,50 +16,32 @@ namespace GroupProject
 	public class clsMainLogic
 	{
 		/// <summary>
-		/// List of items to be returned
+		/// main sql class
 		/// </summary>
-		public List<clsMainLogic> Items;
-
-		/// <summary>
-		/// Item code
-		/// </summary>
-		public string ItemCode;
-
-		/// <summary>
-		/// Item name
-		/// </summary>
-		public string ItemDescription;
-
-		/// <summary>
-		/// item cost
-		/// </summary>
-		public string ItemCost;
+		clsMainSQL mainSQL;
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		public clsMainLogic()
 		{
-			Items = new List<clsMainLogic>();
-			ItemCode = "";
-			ItemDescription = "";
-			ItemCode = "";
+			mainSQL = new clsMainSQL();
 		}
 
 		/// <summary>
-		/// This method overrides the toString metho
-		/// It just returns the item descriptions
+		/// returns an ObservableCollection of all items
 		/// </summary>
 		/// <returns></returns>
-		public override string ToString()
+		public ObservableCollection<Item> GetAllItems()
 		{
 			try
 			{
-				return ItemDescription;
+				return mainSQL.SelectFromItemDesc();
 			}
 			catch (Exception ex)
 			{
-				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + "->" + ex.Message);
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+									MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
 			}
 		}
 

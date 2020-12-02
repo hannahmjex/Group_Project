@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GroupProject.Main;
+using System;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows;
 
@@ -22,7 +24,7 @@ namespace GroupProject
 		/// <summary>
 		/// main window sql class
 		/// </summary>
-		clsMainSQL mainSQL;
+		clsMainLogic mainLogic;
 
 		/// <summary>
 		/// Constructor for Main Window
@@ -33,8 +35,8 @@ namespace GroupProject
 			Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
 			wndItems = new wndItems();
 			wndSearch = new SearchWindow();
-			mainSQL = new clsMainSQL();
-			cboItemSelection.ItemsSource = mainSQL.SelectFromItemDesc();
+			mainLogic = new clsMainLogic();
+			cboItemSelection.ItemsSource = mainLogic.GetAllItems();
 		}
 
 		/// <summary>
@@ -121,7 +123,7 @@ namespace GroupProject
 			//mainLogic.ItemDescription = cboItemSelection.SelectedItem.ToString();
 
 			//Add the DataRow to the DataSet at the current row index
-			dgInvoice.Items.Add(mainSQL.SelectFromItemDesc());
+			dgInvoice.Items.Add(mainLogic.GetAllItems());
 
 
 			//Accept the changes to the DataSet so it will show up in the DataGridView
@@ -160,13 +162,13 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void cboItemSelection_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
-			clsMainLogic mainLogic = new clsMainLogic();
-			mainLogic.Items = mainSQL.SelectFromItemDesc();
-			for (int i = 0; i < mainLogic.Items.Count; i++)
+			ObservableCollection<Item> items = new ObservableCollection<Item>();
+
+			for (int i = 0; i < items.Count; i++)
 			{
-				if (cboItemSelection.SelectedItem.ToString() == mainLogic.Items[i].ItemDescription)
+				if (cboItemSelection.SelectedItem.ToString() == items[i].ItemDesc)
 				{
-					costTextbox.Text = mainLogic.Items[i].ItemCost;
+					costTextbox.Text = items[i].ItemCost;
 				}
 			}
 		}

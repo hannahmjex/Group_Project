@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GroupProject.Main
 {
-	class Item
+	public class Item
 	{
         /// <summary>
         /// Constructs an item object that takes in an item code, description and cost in as parameters
@@ -15,7 +15,7 @@ namespace GroupProject.Main
         /// <param name="itemCode"></param>
         /// <param name="itemDesc"></param>
         /// <param name="itemCost"></param>
-        public Item(int itemCode, string itemDesc, string itemCost)
+        public Item(string itemCode, string itemDesc, string itemCost)
         {
             try
             {
@@ -25,15 +25,14 @@ namespace GroupProject.Main
             }
             catch (Exception ex)
             {
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
         }
 
         /// <summary>
         /// Integer invoice number for invoice
         /// </summary>
-        public int ItemCode { get; set; }
+        public string ItemCode { get; set; }
 
         /// <summary>
         /// String Date on the invoice object
