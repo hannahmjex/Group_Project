@@ -44,7 +44,6 @@ namespace GroupProject
 									MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
 			}
 		}
-
 	}
 }
 

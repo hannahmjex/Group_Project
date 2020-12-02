@@ -126,17 +126,8 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void addButton_Click(object sender, RoutedEventArgs e)
 		{
-			//clsMainLogic mainLogic = new clsMainLogic();
-			//DataSet ds = new DataSet();
-			////Get item code, desc, cost
-			//mainLogic.ItemDescription = cboItemSelection.SelectedItem.ToString();
-
-			//Add the DataRow to the DataSet at the current row index
+			//this is currently wrong
 			dgInvoice.Items.Add(mainLogic.GetAllItems());
-
-
-			//Accept the changes to the DataSet so it will show up in the DataGridView
-			//ds.AcceptChanges();
 		}
 
 		/// <summary>
