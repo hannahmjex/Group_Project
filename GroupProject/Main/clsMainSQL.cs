@@ -49,15 +49,17 @@ namespace GroupProject
 		/// Query to get all item info from Item Desc
 		/// </summary>
 		/// <returns></returns>
-		public List<string> SelectFromItemDesc()
+		public List<clsMainLogic> SelectFromItemDesc()
 		{
 			ds = db.ExecuteSQLStatement("SELECT ItemCode, ItemDesc, Cost FROM ItemDesc", ref returnValues);
 
 			for (int i = 0; i < returnValues; i++)
 			{
-				mainLogic.ItemCode = ds.Tables[0].Rows[i]["ItemCode"].ToString();
-				mainLogic.ItemDescription = ds.Tables[0].Rows[i]["ItemDesc"].ToString();
-				mainLogic.ItemCost = ds.Tables[0].Rows[i]["Cost"].ToString();
+				clsMainLogic items = new clsMainLogic();
+				items.ItemCode = ds.Tables[0].Rows[i][0].ToString();
+				items.ItemDescription = ds.Tables[0].Rows[i][1].ToString();
+				items.ItemCost = ds.Tables[0].Rows[i][2].ToString();
+				mainLogic.Items.Add(items);
 			}
 			return mainLogic.Items;
 		}

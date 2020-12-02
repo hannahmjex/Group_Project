@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Data;
+using System.Windows;
 
 namespace GroupProject
 {
@@ -20,7 +22,7 @@ namespace GroupProject
 		/// <summary>
 		/// main window sql class
 		/// </summary>
-		clsMainLogic mainLogic;
+		clsMainSQL mainSQL;
 
 		/// <summary>
 		/// Constructor for Main Window
@@ -31,8 +33,8 @@ namespace GroupProject
 			Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
 			wndItems = new wndItems();
 			wndSearch = new SearchWindow();
-			mainLogic = new clsMainLogic();
-			cboItemSelection.ItemsSource = mainLogic.GetItems();
+			mainSQL = new clsMainSQL();
+			cboItemSelection.ItemsSource = mainSQL.SelectFromItemDesc();
 		}
 
 		/// <summary>
@@ -113,7 +115,31 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void addButton_Click(object sender, RoutedEventArgs e)
 		{
+			clsMainLogic mainLogic = new clsMainLogic();
+			DataSet ds = new DataSet();
+			//Get item code, desc, cost
+			mainLogic.Items = mainSQL.SelectFromItemDesc();
+			string itemCode = mainLogic.ItemCode;
+			string itemDesc = mainLogic.ItemDescription;
+			string itemCost = mainLogic.ItemCost;
 
+			//Create a new DataRow from the DataSet
+			DataRow DR = ds.Tables[0].NewRow();
+
+			//This value needs to be a unique value
+			DR[0] = Convert.ToString((ds.Tables[0].Rows.Count + 1));
+
+			//Add the first and last names to the DataSet
+			DR[1] = itemCode;
+			DR[2] = itemDesc;
+			DR[3] = itemCost;
+
+			//Add the DataRow to the DataSet at the current row index
+			ds.Tables[0].Rows.InsertAt(DR, dgInvoice.CurrentCell.Item);
+
+
+			//Accept the changes to the DataSet so it will show up in the DataGridView
+			ds.AcceptChanges();
 		}
 
 		/// <summary>
@@ -148,7 +174,15 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void cboItemSelection_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
-
+			clsMainLogic mainLogic = new clsMainLogic();
+			mainLogic.Items = mainSQL.SelectFromItemDesc();
+			for (int i = 0; i < mainLogic.Items.Count; i++)
+			{
+				if (cboItemSelection.SelectedItem.ToString() == mainLogic.Items[i].ItemDescription)
+				{
+					costTextbox.Text = mainLogic.Items[i].ItemCost;
+				}
+			}
 		}
 	}
 }

@@ -14,44 +14,53 @@ namespace GroupProject
 	public class clsMainLogic
 	{
 		/// <summary>
-		/// class exception handling
-		/// </summary>
-		clsExceptionHandling ExceptionHandling;
-
-		/// <summary>
-		/// main SQL
-		/// </summary>
-		clsMainSQL mainSQL;
-
-		/// <summary>
 		/// List of items to be returned
 		/// </summary>
-		public List<string> Items;
+		public List<clsMainLogic> Items;
 
+		/// <summary>
+		/// Item code
+		/// </summary>
 		public string ItemCode;
+
+		/// <summary>
+		/// Item name
+		/// </summary>
 		public string ItemDescription;
+
+		/// <summary>
+		/// item cost
+		/// </summary>
 		public string ItemCost;
-		
+
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		public clsMainLogic()
 		{
-			ExceptionHandling = new clsExceptionHandling();
-			mainSQL = new clsMainSQL();
-			Items = new List<string>();
+			Items = new List<clsMainLogic>();
+			ItemCode = "";
+			ItemDescription = "";
+			ItemCode = "";
 		}
 
-		public List<string> GetItems() {
+		/// <summary>
+		/// This method overrides the toString metho
+		/// It just returns the item descriptions
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
 			try
 			{
-				return mainSQL.SelectFromItemDesc();
+				return ItemDescription;
 			}
 			catch (Exception ex)
 			{
 				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + "->" + ex.Message);
 			}
 		}
+
 	}
 }
 
