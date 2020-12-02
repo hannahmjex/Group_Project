@@ -30,17 +30,17 @@ namespace GroupProject.Main
         }
 
         /// <summary>
-        /// Integer invoice number for invoice
+        /// Integer item code
         /// </summary>
         public string ItemCode { get; set; }
 
         /// <summary>
-        /// String Date on the invoice object
+        /// item description
         /// </summary>
         public string ItemDesc { get; set; }
 
         /// <summary>
-        /// String of the total cost of the invoice
+        /// item cost
         /// </summary>
         public string ItemCost { get; set; }
     }
