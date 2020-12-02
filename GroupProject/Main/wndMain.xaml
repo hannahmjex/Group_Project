@@ -16,9 +16,9 @@
 		<Label Content="Invoice Number:" Margin="240,72,449,310.5" RenderTransformOrigin="0.51,0.611"/>
 		<DataGrid x:Name="dgInvoice" Margin="250,117,203,10.5" IsEnabled="False">
 			<DataGrid.Columns>
-				<DataGridTextColumn Header="Code" IsReadOnly="True" Binding="{Binding Path=Test1}" Width="50"></DataGridTextColumn>
-				<DataGridTextColumn Header="Description" IsReadOnly="True"  Binding="{Binding Path=Test2}" Width="180"></DataGridTextColumn>
-				<DataGridTextColumn Header="Cost" IsReadOnly="True"  Binding="{Binding Path=Test2}" Width="130"></DataGridTextColumn>
+				<DataGridTextColumn Header="Code" IsReadOnly="True" Binding="{Binding Path=Test1}" Width="110"></DataGridTextColumn>
+				<DataGridTextColumn Header="Description" IsReadOnly="True"  Binding="{Binding Path=Test2}" Width="110"></DataGridTextColumn>
+				<DataGridTextColumn Header="Cost" IsReadOnly="True"  Binding="{Binding Path=Test2}" Width="120"></DataGridTextColumn>
 			</DataGrid.Columns>
 		</DataGrid>
 		<ComboBox x:Name="cboItemSelection" Margin="250,18,357,368.5" IsEnabled="False" SelectionChanged="cboItemSelection_SelectionChanged"/>

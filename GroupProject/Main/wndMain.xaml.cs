@@ -36,7 +36,16 @@ namespace GroupProject
 			wndItems = new wndItems();
 			wndSearch = new SearchWindow();
 			mainLogic = new clsMainLogic();
-			cboItemSelection.ItemsSource = mainLogic.GetAllItems();
+			FillItemSelectionBox();
+		}
+
+		/// <summary>
+		/// this method fills the item selection combo box
+		/// </summary>
+		private void FillItemSelectionBox()
+		{
+			var items = mainLogic.GetAllItems();
+			cboItemSelection.ItemsSource = items;
 		}
 
 		/// <summary>
