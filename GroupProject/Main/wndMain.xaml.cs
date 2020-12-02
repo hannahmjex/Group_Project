@@ -115,31 +115,17 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void addButton_Click(object sender, RoutedEventArgs e)
 		{
-			clsMainLogic mainLogic = new clsMainLogic();
-			DataSet ds = new DataSet();
-			//Get item code, desc, cost
-			mainLogic.Items = mainSQL.SelectFromItemDesc();
-			string itemCode = mainLogic.ItemCode;
-			string itemDesc = mainLogic.ItemDescription;
-			string itemCost = mainLogic.ItemCost;
-
-			//Create a new DataRow from the DataSet
-			DataRow DR = ds.Tables[0].NewRow();
-
-			//This value needs to be a unique value
-			DR[0] = Convert.ToString((ds.Tables[0].Rows.Count + 1));
-
-			//Add the first and last names to the DataSet
-			DR[1] = itemCode;
-			DR[2] = itemDesc;
-			DR[3] = itemCost;
+			//clsMainLogic mainLogic = new clsMainLogic();
+			//DataSet ds = new DataSet();
+			////Get item code, desc, cost
+			//mainLogic.ItemDescription = cboItemSelection.SelectedItem.ToString();
 
 			//Add the DataRow to the DataSet at the current row index
-			ds.Tables[0].Rows.InsertAt(DR, dgInvoice.CurrentCell.Item);
+			dgInvoice.Items.Add(mainSQL.SelectFromItemDesc());
 
 
 			//Accept the changes to the DataSet so it will show up in the DataGridView
-			ds.AcceptChanges();
+			//ds.AcceptChanges();
 		}
 
 		/// <summary>
