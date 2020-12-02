@@ -1,6 +1,8 @@
-﻿using System;
+﻿using GroupProject.Search;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,10 +21,51 @@ namespace GroupProject
 	/// </summary>
 	public partial class SearchWindow : Window
 	{
+        /// <summary>
+        /// Declare clsSearchLogic property to call search logic methods
+        /// </summary>
+        clsSearchLogic clsSearchLogic;
+
 		public SearchWindow()
 		{
-			InitializeComponent();
+            try
+            {
+                InitializeComponent();
+
+                //Instantiate a new search logic class
+                clsSearchLogic = new clsSearchLogic();
+
+                //Fill up the invoices data grid using the search logic class
+                FillInvoicesDataGrid();
+            }
+            catch (Exception ex)
+            {
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
 		}
+
+        /// <summary>
+        /// Fills up the Invoices data grid initially with all invoices and also fills the search combo boxes appropriately.
+        /// </summary>
+        private void FillInvoicesDataGrid()
+        {
+            try
+            {
+                var allInvoices = clsSearchLogic.GetAllInvoices();
+
+                //Fill search window UI components with invoice information 
+                dataGridInvoices.ItemsSource = allInvoices;
+                comboBoxInvoiceNum.ItemsSource = allInvoices;
+                comboBoxInvoiceDate.ItemsSource = allInvoices;
+                comboBoxInvoiceTotalCharge.ItemsSource = allInvoices;
+            }
+            catch (Exception ex)
+            {
+                HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+                            MethodInfo.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
         /// <summary>
         /// Reset what the Invoices Data Grid shows based on the invoice number selected in the combo box
@@ -52,6 +95,24 @@ namespace GroupProject
         private void comboBoxInvoiceTotalCharge_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        /// <summary>
+        /// exception handler that shows the error
+        /// </summary>
+        /// <param name="sClass">the class</param>
+        /// <param name="sMethod">the method</param>
+        /// <param name="sMessage">the error message</param>
+        private void HandleError(string sClass, string sMethod, string sMessage)
+        {
+            try
+            {
+                MessageBox.Show(sClass + "." + sMethod + " -> " + sMessage);
+            }
+            catch (System.Exception ex)
+            {
+                System.IO.File.AppendAllText("C:\\Error.txt", Environment.NewLine + "HandleError Exception: " + ex.Message);
+            }
         }
     }
 }

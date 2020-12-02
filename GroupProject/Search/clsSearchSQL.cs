@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
@@ -13,12 +14,64 @@ namespace GroupProject.Search
 	public class clsSearchSQL
 	{
         /// <summary>
+        /// Declare data access class property
+        /// </summary>
+        clsDataAccess db;
+
+        /// <summary>
+        /// Constructs a new clsSearchSQL class that will communicate with the data base to make queries for the search screen
+        /// </summary>
+        public clsSearchSQL()
+        {
+            db = new clsDataAccess();
+        }
+
+        /// <summary>
         /// Returns select all invoices SQL Query
         /// </summary>
         /// <returns></returns>
-        public string GetAllInvoices()
+        public ObservableCollection<Invoice> GetAllInvoices()
         {
-            return "SELECT * FROM Invoices";
+            try
+            {
+                // Create local invoices collection
+                ObservableCollection<Invoice> invoices = new ObservableCollection<Invoice>();
+
+                // Create DataSet to hold the data
+                DataSet ds;
+
+                //Number of return values
+                int iRet = 0;
+
+                //Sql string to get all invoices
+                string sql = "SELECT * FROM Invoices";
+
+                // Get all invoices from the database.
+                ds = db.ExecuteSQLStatement(sql, ref iRet);
+
+                // Iterate over rows
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    // Grab data from their columns for each row
+                    int invoiceNum = int.Parse(ds.Tables[0].Rows[i][0].ToString());
+                    string invoiceDate = ds.Tables[0].Rows[i][1].ToString();
+                    string totalCost = ds.Tables[0].Rows[i][2].ToString();
+
+                    // Create new local invoice object
+                    Invoice invoice = new Invoice(invoiceNum, invoiceDate, totalCost);
+
+                    // Add newly created invoice object to local collection of invoices.
+                    invoices.Add(invoice);
+                }
+
+                // Return invoices
+                return invoices;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                       MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
         }
 
         /// THIS MAY NOT BE NEEDED
