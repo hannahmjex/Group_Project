@@ -37,6 +37,8 @@ namespace GroupProject
 		/// </summary>
 		List<string> AddedItems;
 
+		ObservableCollection<Item> items;
+
 		/// <summary>
 		/// Constructor for Main Window
 		/// </summary>
@@ -51,6 +53,20 @@ namespace GroupProject
 			ds = new DataSet();
 			FillItemSelectionBox();
 		}
+
+		/// <summary>
+        /// Called when the form is loaded.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void WindowBinding_Loaded(object sender, RoutedEventArgs e)
+        {
+            //Create some data in the list
+            items = new ObservableCollection<Item>();
+
+            //Bind the DataGrids to the ObservableCollections
+			dgInvoice.ItemsSource = items;
+        }
 
 		/// <summary>
 		/// this method fills the item selection combo box
@@ -139,9 +155,8 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void addButton_Click(object sender, RoutedEventArgs e)
 		{	
-			ObservableCollection<Item> items = new ObservableCollection<Item>();
 			items = mainLogic.AddItemRow(cboItemSelection.SelectedItem.ToString());
-			//dgInvoice.Columns.Add(items);
+			dgInvoice.Items.Add(items);
 
 
 

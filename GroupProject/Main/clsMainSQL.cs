@@ -91,10 +91,10 @@ namespace GroupProject
 			{
 				ObservableCollection<Item> items = new ObservableCollection<Item>();
 				
-				var sql = @"SELECT ItemCode, ItemDesc, Cost FROM ItemDesc WHERE itemDesc = @itemDesc";
+				var sql = @"SELECT ItemCode, ItemDesc, Cost FROM ItemDesc WHERE ItemDesc = @itemDesc";
 				//ds = db.ExecuteSQLStatement("SELECT ItemCode, ItemDesc, Cost FROM ItemDesc WHERE itemDesc = '" + itemDesc + "'", ref returnValues);
 		
-				db.ExecuteSQLStatement(sql, ref returnValues, (OleDbCommand cmd) => {
+				ds = db.ExecuteSQLStatement(sql, ref returnValues, (OleDbCommand cmd) => {
 					cmd.Parameters.AddWithValue("@itemDesc", itemDesc);
 				});
 		
