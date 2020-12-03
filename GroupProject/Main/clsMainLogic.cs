@@ -59,7 +59,6 @@ namespace GroupProject
 			}
 			catch (Exception ex)
 			{
-
 				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
 			}
 		}
