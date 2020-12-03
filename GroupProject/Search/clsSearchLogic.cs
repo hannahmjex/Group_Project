@@ -41,5 +41,18 @@ namespace GroupProject.Search
                                     MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
         }
-	}
+
+        internal ObservableCollection<Invoice> GetFilteredInvoices(string invoiceNumber, string invoiceDate, string totalCost)
+        {
+            try
+            {
+                return searchSQL.GetFilteredInvoices(invoiceNumber, invoiceDate, totalCost);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+        }
+    }
 }
