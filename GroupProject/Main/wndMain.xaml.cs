@@ -138,27 +138,35 @@ namespace GroupProject
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void addButton_Click(object sender, RoutedEventArgs e)
-		{
-			//make temporary table
-			DataTable table;
-			if (dgInvoice.Items.Count == 0)
-			{
-				table = ds.Tables.Add("Items");
-				table.Columns.Add("Code");
-				table.Columns.Add("Description");
-				table.Columns.Add("Cost");
-			}
+		{	
+			ObservableCollection<Item> items = new ObservableCollection<Item>();
+			items = mainLogic.AddItemRow(cboItemSelection.SelectedItem.ToString());
+			//dgInvoice.Columns.Add(items);
 
-			table = ds.Tables[0];
-			//get item info
-			ObservableCollection<Item> itemInfo = mainLogic.AddItemRow(cboItemSelection.SelectedItem.ToString());
-			//add the item info to the temporary table
-			table.Rows.Add(itemInfo);
-			//dg content to temp table
-			dgInvoice.DataContext = table;
 
-			//add description to added items
-			AddedItems.Add(itemInfo.ToString());
+
+		
+			
+				////make temporary table
+			//DataTable table;
+			//if (dgInvoice.Items.Count == 0)
+			//{
+			//	table = ds.Tables.Add("Items");
+			//	table.Columns.Add("Code");
+			//	table.Columns.Add("Description");
+			//	table.Columns.Add("Cost");
+			//}
+			//
+			//table = ds.Tables[0];
+			////get item info
+			//ObservableCollection<Item> itemInfo = mainLogic.AddItemRow(cboItemSelection.SelectedItem.ToString());
+			////add the item info to the temporary table
+			//table.Rows.Add(itemInfo);
+			////dg content to temp table
+			//dgInvoice.DataContext = table;
+			//
+			////add description to added items
+			//AddedItems.Add(itemInfo.ToString());
 
 			//update cost textbox 
 			//Update total cost 
