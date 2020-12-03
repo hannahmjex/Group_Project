@@ -33,7 +33,7 @@ namespace GroupProject
 		/// <param name="sSQL">The SQL statement to be executed.</param>
 		/// <param name="iRetVal">Reference parameter that returns the number of selected rows.</param>
 		/// <returns>Returns a DataSet that contains the data from the SQL statement.</returns>
-		public DataSet ExecuteSQLStatement(string sSQL, ref int iRetVal)
+		public DataSet ExecuteSQLStatement(string sSQL, ref int iRetVal, Action<OleDbCommand> callback = null)
 		{
 			try
 			{
@@ -47,9 +47,15 @@ namespace GroupProject
 
 						//Open the connection to the database
 						conn.Open();
+						
+                        //Create an OleDbCommand object using the sql statement and the connection
+                        var cmd = new OleDbCommand(sSQL, conn);
 
-						//Add the information for the SelectCommand using the SQL statement and the connection object
-						adapter.SelectCommand = new OleDbCommand(sSQL, conn);
+                        //Invoke callback in cmd object if callback is not null
+                        callback?.Invoke(cmd);
+
+                        //Add the information for the SelectCommand using the SQL statement and the connection object
+                        adapter.SelectCommand = cmd;
 						adapter.SelectCommand.CommandTimeout = 0;
 
 						//Fill up the DataSet with data
