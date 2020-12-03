@@ -44,18 +44,12 @@ namespace GroupProject
 			}
 		}
 
-		public List<string> GetItemRow(string itemDesc)
+		public ObservableCollection<Item> AddItemRow(string itemDesc)
 		{
 			try
 			{
-				DataSet itemRow = mainSQL.GetItemRow(itemDesc);
-				List<string> itemRowList = new List<string>();
-
-				for (int i = 0; i < itemRow.Tables[0].Columns.Count; i++)
-				{
-					itemRowList.Add(itemRow.Tables[0].Rows[0][i].ToString());
-				}
-				return itemRowList;
+				ObservableCollection<Item> itemRow = mainSQL.AddRow(itemDesc);
+				return itemRow;
 			}
 			catch (Exception ex)
 			{

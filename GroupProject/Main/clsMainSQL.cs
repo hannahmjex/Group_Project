@@ -85,12 +85,29 @@ namespace GroupProject
 		/// </summary>
 		/// <param name="itemDesc"></param>
 		/// <returns></returns>
-		public DataSet GetItemRow(string itemDesc)
+		public ObservableCollection<Item> AddRow(string itemDesc)
 		{
 			try
 			{
-				string sSQL = "SELECT ItemCode, ItemDesc, Cost FROM ItemDesc WHERE itemDesc = '" + itemDesc + "'";
-				return db.ExecuteSQLStatement(sSQL, ref returnValues);
+				ObservableCollection<Item> items = new ObservableCollection<Item>();
+				ds = db.ExecuteSQLStatement("SELECT ItemCode, ItemDesc, Cost FROM ItemDesc WHERE itemDesc = '" + itemDesc + "'", ref returnValues);
+
+				// Iterate over rows
+				for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+				{
+					// Grab data from their columns for each row
+					string itemCode = ds.Tables[0].Rows[i][0].ToString();
+					string itemDescription = ds.Tables[0].Rows[i][1].ToString();
+					string itemCost = ds.Tables[0].Rows[i][2].ToString();
+
+					// Create new local item object
+					Item item = new Item(itemCode, itemDescription, itemCost);
+
+					// Add newly created item object to local collection of items.
+					items.Add(item);
+				}
+
+				return items;
 			}
 			catch (Exception ex)
 			{

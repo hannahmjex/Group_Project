@@ -150,15 +150,18 @@ namespace GroupProject
 			}
 
 			table = ds.Tables[0];
-			List<string> itemInfo = mainLogic.GetItemRow(cboItemSelection.SelectedItem.ToString());
-			table.Rows.Add(itemInfo[0], itemInfo[1], itemInfo[2]);
+			//get item info
+			ObservableCollection<Item> itemInfo = mainLogic.AddItemRow(cboItemSelection.SelectedItem.ToString());
+			//add the item info to the temporary table
+			table.Rows.Add(itemInfo);
+			//dg content to temp table
 			dgInvoice.DataContext = table;
 
 			//add description to added items
-			AddedItems.Add(itemInfo[0]);
+			AddedItems.Add(itemInfo.ToString());
 
 			//update cost textbox 
-			//UpdateTotalCost();
+			//Update total cost 
 		}
 
 		/// <summary>
