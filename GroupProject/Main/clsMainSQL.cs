@@ -39,7 +39,7 @@ namespace GroupProject
 			db = new clsDataAccess();
 			ds = new DataSet();
 		}
-		
+
 		#region SQL Statement Methods
 		/// <summary>
 		/// Query to get all item info from Item Desc
@@ -47,30 +47,55 @@ namespace GroupProject
 		/// <returns></returns>
 		public ObservableCollection<Item> SelectFromItemDesc()
 		{
-
-			// Create local invoices collection
-			ObservableCollection<Item> items = new ObservableCollection<Item>();
-
-			// Get all items from the database.
-			ds = db.ExecuteSQLStatement("SELECT ItemCode, ItemDesc, Cost FROM ItemDesc", ref returnValues);
-
-			// Iterate over rows
-			for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+			try
 			{
-				// Grab data from their columns for each row
-				string itemCode = ds.Tables[0].Rows[i][0].ToString();
-				string itemDescription = ds.Tables[0].Rows[i][1].ToString();
-				string itemCost = ds.Tables[0].Rows[i][2].ToString();
+				// Create local invoices collection
+				ObservableCollection<Item> items = new ObservableCollection<Item>();
 
-				// Create new local item object
-				Item item = new Item(itemCode, itemDescription, itemCost);
+				// Get all items from the database.
+				ds = db.ExecuteSQLStatement("SELECT ItemCode, ItemDesc, Cost FROM ItemDesc", ref returnValues);
 
-				// Add newly created item object to local collection of items.
-				items.Add(item);
+				// Iterate over rows
+				for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+				{
+					// Grab data from their columns for each row
+					string itemCode = ds.Tables[0].Rows[i][0].ToString();
+					string itemDescription = ds.Tables[0].Rows[i][1].ToString();
+					string itemCost = ds.Tables[0].Rows[i][2].ToString();
+
+					// Create new local item object
+					Item item = new Item(itemCode, itemDescription, itemCost);
+
+					// Add newly created item object to local collection of items.
+					items.Add(item);
+				}
+
+				// Return items
+				return items;
 			}
+			catch (Exception ex)
+			{
 
-			// Return items
-			return items;
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
+		}
+
+		/// <summary>
+		/// returns item code and cost based on description
+		/// </summary>
+		/// <param name="itemDesc"></param>
+		/// <returns></returns>
+		public DataSet GetItemRow(string itemDesc)
+		{
+			try
+			{
+				string sSQL = "SELECT ItemCode, ItemDesc, Cost FROM ItemDesc WHERE itemDesc = '" + itemDesc + "'";
+				return db.ExecuteSQLStatement(sSQL, ref returnValues);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
 		}
 
 		/// <summary>
@@ -136,7 +161,7 @@ namespace GroupProject
 		{
 			return $"DELETE FROM LineItems WHERE InvoiceNum = {invoiceNum}";
 		}
-		
+
 		/// <summary>
 		/// Query to delete an Item from Invoice.
 		/// </summary>

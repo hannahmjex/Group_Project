@@ -1,5 +1,6 @@
 ﻿using GroupProject.Main;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows;
@@ -27,6 +28,16 @@ namespace GroupProject
 		clsMainLogic mainLogic;
 
 		/// <summary>
+		/// dataset ds
+		/// </summary>
+		DataSet ds;
+
+		/// <summary>
+		/// observable collection of items
+		/// </summary>
+		List<string> AddedItems;
+
+		/// <summary>
 		/// Constructor for Main Window
 		/// </summary>
 		public MainWindow()
@@ -36,6 +47,8 @@ namespace GroupProject
 			wndItems = new wndItems();
 			wndSearch = new SearchWindow();
 			mainLogic = new clsMainLogic();
+			AddedItems = new List<string>();
+			ds = new DataSet();
 			FillItemSelectionBox();
 		}
 
@@ -126,8 +139,26 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void addButton_Click(object sender, RoutedEventArgs e)
 		{
-			//this is currently wrong
-			dgInvoice.Items.Add(mainLogic.GetAllItems());
+			//make temporary table
+			DataTable table;
+			if (dgInvoice.Items.Count == 0)
+			{
+				table = ds.Tables.Add("Items");
+				table.Columns.Add("Code");
+				table.Columns.Add("Description");
+				table.Columns.Add("Cost");
+			}
+
+			table = ds.Tables[0];
+			List<string> itemInfo = mainLogic.GetItemRow(cboItemSelection.SelectedItem.ToString());
+			table.Rows.Add(itemInfo[0], itemInfo[1], itemInfo[2]);
+			dgInvoice.DataContext = table;
+
+			//add description to added items
+			AddedItems.Add(itemInfo[0]);
+
+			//update cost textbox 
+			//UpdateTotalCost();
 		}
 
 		/// <summary>
@@ -162,11 +193,11 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void cboItemSelection_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
-			ObservableCollection<Item> items = new ObservableCollection<Item>();
+			var items = mainLogic.GetAllItems();
 
 			for (int i = 0; i < items.Count; i++)
 			{
-				if (cboItemSelection.SelectedItem.ToString() == items[i].ItemDesc)
+				if (cboItemSelection.SelectedIndex == i)
 				{
 					costTextbox.Text = items[i].ItemCost;
 				}

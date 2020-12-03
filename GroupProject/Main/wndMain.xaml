@@ -21,19 +21,19 @@
 				<DataGridTextColumn Header="Cost" IsReadOnly="True"  Binding="{Binding Path=Test2}" Width="120"></DataGridTextColumn>
 			</DataGrid.Columns>
 		</DataGrid>
-		<ComboBox x:Name="cboItemSelection" Margin="250,18,357,368.5" IsEnabled="False" SelectionChanged="cboItemSelection_SelectionChanged"/>
+		<ComboBox x:Name="cboItemSelection" DisplayMemberPath="ItemDesc" Margin="250,18,357,368.5" IsEnabled="False" SelectionChanged="cboItemSelection_SelectionChanged"/>
 		<Button x:Name="addItemButton" IsEnabled="False" Content="Add Item" HorizontalAlignment="Left" Margin="633,28,0,0" VerticalAlignment="Top" Width="120" Click="addButton_Click" Height="28"/>
 		<Button x:Name="newButton" Content="New Invoice" HorizontalAlignment="Left" Margin="52,138,0,0" VerticalAlignment="Top" Width="120" Click="newButton_Click" Height="26" RenderTransformOrigin="-0.377,0.327"/>
 		<Button x:Name="editButton" IsEnabled="False" Content="Edit Invoice" HorizontalAlignment="Left" Margin="52,194,0,0" VerticalAlignment="Top" Width="120" Click="editButton_Click" Height="26"/>
 		<Button x:Name="deleteButton" IsEnabled="False" Content="Delete Invoice" HorizontalAlignment="Left" Margin="52,250,0,0" VerticalAlignment="Top" Width="120" Click="deleteButton_Click" Height="26"/>
 		<Button x:Name="saveButton" IsEnabled="False" Content="Save Invoice" HorizontalAlignment="Left" Margin="633,194,0,0" VerticalAlignment="Top" Width="120" Click="saveButton_Click" Height="26"/>
 		<Button x:Name="removeItemButton" Visibility="Hidden" IsEnabled="False" Content="Remove Item" HorizontalAlignment="Left" Margin="633,44,0,0" VerticalAlignment="Top" Width="120" Click="removeItemButton_Click" Height="28"/>
-		<TextBox x:Name="costTextbox" IsReadOnly="true" TextWrapping="Wrap" Text="" Margin="540,18,221,378.5"/>
-		<Label Content="Item Cost: $" Margin="460,18,260,366.5" RenderTransformOrigin="0.441,0.462"/>
+		<TextBox x:Name="costTextbox" IsReadOnly="true" TextWrapping="Wrap" Text="" Margin="547,18,214,378.5"/>
 		<Label Content="TBD" Margin="351,72,399,310.5"/>
-		<Label Content="Invoice Date:" Margin="420,72,291,310.5"/>
-		<TextBox x:Name="invoiceDateTextbox" Text="" Margin="519,72,184,318.5"/>
+		<Label Content="Invoice Date:" Margin="401,72,310,310.5"/>
+		<TextBox x:Name="invoiceDateTextbox" Text="DD/MM/YYYY" Margin="510,72,193,318.5"/>
 		<TextBox x:Name="totalTextbox" IsReadOnly="true" TextWrapping="Wrap" Text="" Margin="685,252,62,144.5"/>
 		<Label Content="Total: $" Margin="620,252,110,135.5"/>
+		<Label Content="Cost: $" Margin="488,18,253,369.5"/>
 	</Grid>
 </Window>
