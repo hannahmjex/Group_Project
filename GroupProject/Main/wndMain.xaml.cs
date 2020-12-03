@@ -35,9 +35,15 @@ namespace GroupProject
 		/// <summary>
 		/// observable collection of items
 		/// </summary>
-		List<string> AddedItems;
+		List<string> items;
 
-		ObservableCollection<Item> items;
+		List<string> addedItems;
+		/// <summary>
+		/// boolean to tell if the invoice is being edited
+		/// </summary>
+		bool editing;
+
+
 
 		/// <summary>
 		/// Constructor for Main Window
@@ -49,8 +55,10 @@ namespace GroupProject
 			wndItems = new wndItems();
 			wndSearch = new SearchWindow();
 			mainLogic = new clsMainLogic();
-			AddedItems = new List<string>();
+			addedItems = new List<string>();
+			items = new List<string>();
 			ds = new DataSet();
+			addedItems = new List<string>();
 			FillItemSelectionBox();
 		}
 
@@ -62,7 +70,7 @@ namespace GroupProject
         private void WindowBinding_Loaded(object sender, RoutedEventArgs e)
         {
             //Create some data in the list
-            items = new ObservableCollection<Item>();
+           // items = new ObservableCollection<Item>();
 
             //Bind the DataGrids to the ObservableCollections
 			dgInvoice.ItemsSource = items;
@@ -100,7 +108,8 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void editButton_Click(object sender, RoutedEventArgs e)
 		{
-
+			//make invoice not read only
+			dgInvoice.IsReadOnly = false;
 		}
 
 		/// <summary>
@@ -112,7 +121,8 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void removeItemButton_Click(object sender, RoutedEventArgs e)
 		{
-
+			dgInvoice.SelectedCells.Clear();
+			//call sql statement to remove item
 		}
 
 		/// <summary>
@@ -154,37 +164,49 @@ namespace GroupProject
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void addButton_Click(object sender, RoutedEventArgs e)
-		{	
-			items = mainLogic.AddItemRow(cboItemSelection.SelectedItem.ToString());
-			dgInvoice.Items.Add(items);
+		{
+			//make temporary table
+			DataTable table;
+			if (dgInvoice.Items.Count == 0)
+			{
+				table = ds.Tables.Add("Items");
+				table.Columns.Add("Code");
+				table.Columns.Add("Description");
+				table.Columns.Add("Cost");
+			}
 
+			table = ds.Tables[0];
 
-
-		
+			//get item info
+			var selectedItem = (Item)cboItemSelection.SelectedItem;
+			List<string> itemInfo = mainLogic.GetItemRow(selectedItem.ItemDesc);
+			//add the item info to the temporary table
+			table.Rows.Add(itemInfo[0], itemInfo[1], itemInfo[2]);
+			table.AcceptChanges();
+			dgInvoice.DataContext = table;
 			
-				////make temporary table
-			//DataTable table;
-			//if (dgInvoice.Items.Count == 0)
-			//{
-			//	table = ds.Tables.Add("Items");
-			//	table.Columns.Add("Code");
-			//	table.Columns.Add("Description");
-			//	table.Columns.Add("Cost");
-			//}
-			//
-			//table = ds.Tables[0];
-			////get item info
-			//ObservableCollection<Item> itemInfo = mainLogic.AddItemRow(cboItemSelection.SelectedItem.ToString());
-			////add the item info to the temporary table
-			//table.Rows.Add(itemInfo);
-			////dg content to temp table
-			//dgInvoice.DataContext = table;
-			//
-			////add description to added items
-			//AddedItems.Add(itemInfo.ToString());
+			dgInvoice.UpdateLayout();
+
+			dgInvoice.ItemsSource = table.Rows;
+			//dgInvoice.ItemsSource = items;
+
+
+			//add description to added items
+			addedItems.Add(itemInfo.ToString());
+
+	
 
 			//update cost textbox 
 			//Update total cost 
+			UpdateTotalCost();
+		}
+
+		/// <summary>
+		/// This method updates the total cost when a new item is added to the invoice
+		/// </summary>
+		private void UpdateTotalCost()
+		{
+			
 		}
 
 		/// <summary>
@@ -197,7 +219,19 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void saveButton_Click(object sender, RoutedEventArgs e)
 		{
+			//if no date entered
+			if (invoiceDateTextbox.Text == "DD/MM/YYYY" || invoiceDateTextbox.Text == "")
+			{
+				MessageBox.Show("Please enter a date.");
+			}
+			else
+			{
+				//fill in invoice label
+				//call sql to get invoice num
 
+				//change invoice to read only mode
+				dgInvoice.IsReadOnly = true;
+			}
 		}
 
 		/// <summary>
@@ -208,7 +242,8 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void deleteButton_Click(object sender, RoutedEventArgs e)
 		{
-
+			dgInvoice.Items.Clear();
+			//call sql statement to delete invoice
 		}
 
 		/// <summary>
@@ -228,6 +263,11 @@ namespace GroupProject
 					costTextbox.Text = items[i].ItemCost;
 				}
 			}
+		}
+
+		private void dgInvoice_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+		{
+			removeItemButton.IsEnabled = true;
 		}
 	}
 }
