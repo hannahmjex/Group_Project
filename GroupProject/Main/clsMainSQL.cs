@@ -112,8 +112,9 @@ namespace GroupProject
 		{
 			try
 			{
-				return $"SELECT InvoiceNum, InvoiceDate, TotalCost FROM Invoices WHERE InvoiceNum = {invoiceNum}";
-			}
+                return $"SELECT InvoiceNum, InvoiceDate, TotalCost FROM Invoices WHERE InvoiceNum = {invoiceNum}";
+
+            }
 			catch (Exception ex)
 			{
 				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
@@ -125,14 +126,37 @@ namespace GroupProject
 		/// MIGHT NOT NEED THIS
 		/// Query to get item code, description, and cost in line items based on item code and invoice number
 		/// </summary>
-		/// <param name="invoiceNum"></param>
+		/// <param name="invoiceNumber"></param>
 		/// <returns></returns>
-		public string SelectFromLineItems(int invoiceNum)
+		public ObservableCollection<Item> SelectFromLineItems(string invoiceNumber)
 		{
 			try
 			{
-				return $"SELECT LineItems.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost FROM LineItems, ItemDesc Where LineItems.ItemCode = ItemDesc.ItemCode And LineItems.InvoiceNum = {invoiceNum}";
-			}
+                // Create local invoices collection
+                ObservableCollection<Item> items = new ObservableCollection<Item>();
+
+                //var sql = $"SELECT * FROM LineItems WHERE InvoicNum = @invoiceNum";
+                var sql =  $"SELECT LineItems.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost FROM LineItems, ItemDesc Where LineItems.ItemCode = ItemDesc.ItemCode And LineItems.InvoiceNum = " + invoiceNumber;
+
+                var ds = db.ExecuteSQLStatement(sql, ref returnValues);
+
+                // Iterate over rows
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    // Grab data from their columns for each row
+                    string itemCode = ds.Tables[0].Rows[i][0].ToString();
+                    string itemDescription = ds.Tables[0].Rows[i][1].ToString();
+                    string itemCost = ds.Tables[0].Rows[i][2].ToString();
+
+                    // Create new local item object
+                    Item item = new Item(itemCode, itemDescription, itemCost);
+
+                    // Add newly created item object to local collection of items.
+                    items.Add(item);
+                }
+
+                return items;
+            }
 			catch (Exception ex)
 			{
 				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +

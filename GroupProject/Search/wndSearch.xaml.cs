@@ -1,6 +1,7 @@
 ﻿using GroupProject.Search;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -18,7 +19,12 @@ namespace GroupProject
         /// </summary>
         clsSearchLogic clsSearchLogic;
 
-		public SearchWindow()
+        /// <summary>
+        /// Declare a main window object
+        /// </summary>
+        MainWindow MainWindow;
+
+        public SearchWindow(MainWindow mainWindow)
 		{
             try
             {
@@ -26,6 +32,7 @@ namespace GroupProject
 
                 //Instantiate a new search logic class
                 clsSearchLogic = new clsSearchLogic();
+                MainWindow = mainWindow;
 
                 //Fill up the invoices data grid using the search logic class
                 InitializeInvoicesDataGrid();
@@ -169,11 +176,11 @@ namespace GroupProject
         {
             try
             {
-                var invoice = dataGridInvoices.SelectedItem;
+                var invoice = (Invoice)dataGridInvoices.SelectedItem;
 
-                //NEED TO SEND THE INVOICE (OR INVOICE INFORMATION) TO MAIN SCREEN
+                MainWindow.ShowSelectedInvoiceItems(invoice.InvoiceNum);
 
-                //NEEED TO CLOSE THE SEARCH WINDOW
+                this.Hide();
             }
             catch (Exception ex)
             {

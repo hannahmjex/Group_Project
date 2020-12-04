@@ -144,6 +144,22 @@ namespace GroupProject
 				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
 			}
 		}
-	}
+
+        /// <summary>
+		/// returns an ObservableCollection of all items
+		/// </summary>
+		/// <returns></returns>
+		public ObservableCollection<Item> GetItemsForInvoice(string invoiceNumber)
+        {
+            try
+            {
+                return mainSQL.SelectFromLineItems(invoiceNumber);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+        }
+    }
 }
 

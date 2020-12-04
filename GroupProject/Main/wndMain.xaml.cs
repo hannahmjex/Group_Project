@@ -62,7 +62,7 @@ namespace GroupProject
 				InitializeComponent();
 				Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
 				wndItems = new wndItems();
-				wndSearch = new SearchWindow();
+				wndSearch = new SearchWindow(this);
 				mainLogic = new clsMainLogic();
 				exceptionHandling = new clsExceptionHandling();
 				addedItems = new List<string>();
@@ -86,8 +86,8 @@ namespace GroupProject
 			try
 			{
 				var items = mainLogic.GetAllItems();
-				cboItemSelection.ItemsSource = items.Select(x => x.Description).Distinct();
-			}
+                cboItemSelection.ItemsSource = items.Select(x => x.Description).Distinct();
+            }
 			catch (Exception ex)
 			{
 				exceptionHandling.HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
@@ -104,33 +104,31 @@ namespace GroupProject
 		private void newButton_Click(object sender, RoutedEventArgs e)
 		{
 			try
-			{
-				//if there are items in the datagrid
-				if (dgInvoice.Items.Count != 0)
-				{
-					dgInvoice.Items.Clear();
-				}
-				//enable other features
-				cboItemSelection.IsEnabled = true;
-				addItemButton.IsEnabled = true;
-				saveButton.IsEnabled = true;
-				invoiceDate.IsEnabled = true;
-				total = 0;
-			}
-			catch (Exception ex)
+            {
+                //if there are items in the datagrid
+                if (dgInvoice.Items.Count != 0)
+                {
+                    dgInvoice.Items.Clear();
+                }
+                //enable other features
+                SetIsEnabled(true);
+
+                total = 0;
+            }
+            catch (Exception ex)
 			{
 				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
 									   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
 			}
 		}
 
-		/// <summary>
-		/// This method is called when the edit invoice button is clicked
-		/// it allows the user to edit the current invoice
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void editButton_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// This method is called when the edit invoice button is clicked
+        /// it allows the user to edit the current invoice
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void editButton_Click(object sender, RoutedEventArgs e)
 		{
 			try
 			{
@@ -217,7 +215,16 @@ namespace GroupProject
 			try
 			{
 				this.Hide();
-				wndSearch.ShowDialog();
+
+                if (wndSearch != null)
+                {
+                    wndSearch = null;
+                }
+
+                wndSearch = new SearchWindow(this);
+
+                wndSearch.ShowDialog();
+
 				this.Show();
 			}
 			catch (Exception ex)
@@ -238,8 +245,8 @@ namespace GroupProject
 			try
 			{
 				//get item info
-				var selectedItem = (Item)cboItemSelection.SelectedItem;
-				itemInfo = mainLogic.GetItemRow(selectedItem.ItemDesc);
+				var itemDescription = cboItemSelection.SelectedItem.ToString();
+				itemInfo = mainLogic.GetItemRow(itemDescription);
 
 				//add items to data grid
 				dgInvoice.Items.Add(new Item(itemInfo[0], itemInfo[1], itemInfo[2]));
@@ -257,10 +264,22 @@ namespace GroupProject
 			}
 		}
 
-		/// <summary>
-		/// This method updates the total cost when a new item is added to the invoice
-		/// </summary>
-		private void UpdateTotalCost(bool added)
+        public void ShowSelectedInvoiceItems(int invoiceNum)
+        {
+            var items = mainLogic.GetItemsForInvoice(invoiceNum.ToString());
+
+            SetIsEnabled(true);
+            editButton.IsEnabled = true;
+            deleteButton.IsEnabled = true;
+            dgInvoice.IsEnabled = false;
+
+            dgInvoice.ItemsSource = items;
+        }
+
+        /// <summary>
+        /// This method updates the total cost when a new item is added to the invoice
+        /// </summary>
+        private void UpdateTotalCost(bool added)
 		{
 			try
 			{
@@ -426,5 +445,17 @@ namespace GroupProject
 									   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
 			}
 		}
-	}
+
+        /// <summary>
+        /// Set IsEnabled property for contol elements
+        /// </summary>
+        /// <param name="isEnabled"></param>
+        private void SetIsEnabled(bool isEnabled)
+        {
+            cboItemSelection.IsEnabled = isEnabled;
+            addItemButton.IsEnabled = isEnabled;
+            saveButton.IsEnabled = isEnabled;
+            invoiceDate.IsEnabled = isEnabled;
+        }
+    }
 }
