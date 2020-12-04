@@ -65,16 +65,75 @@ namespace GroupProject
 			}
 		}
 
-		public void SaveInvoice(string invoiceDate, int totalCost)
-		{
+		/// <summary>
+		/// saves the invoice
+		/// </summary>
+		/// <param name="invoiceDate"></param>
+		/// <param name="totalCost"></param>
+		/// <returns></returns>
+		public void SaveInvoice(string invoiceDate, string totalCost)
+		{ 
 			try
 			{
 				//save invoice
 				mainSQL.InsertInvoices(invoiceDate, totalCost);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
+		}
 
+		/// <summary>
+		/// returns invoice number
+		/// </summary>
+		/// <returns></returns>
+		public string GetInvoiceNumber()
+		{
+			try
+			{
 				//get invoice number
-				DataSet invoice = mainSQL.GetInvoiceNum(invoiceDate, totalCost);
+				DataSet invoiceNum = mainSQL.GetInvoiceNum();
+				List<string> invoiceNumString = new List<string>();
 
+				//extract invoice number and add to list bc idk how else to do this
+				for (int i = 0; i < invoiceNum.Tables[0].Columns.Count; i++)
+				{
+					invoiceNumString.Add(invoiceNum.Tables[0].Rows[0][i].ToString());
+				}
+				return invoiceNumString[0];
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
+		}
+
+		/// <summary>
+		/// updates the invoice
+		/// </summary>
+		/// <param name="totalCost"></param>
+		public void UpdateInvoice(string totalCost)
+		{
+			try
+			{
+				//get invoice number
+				string invoiceNum = GetInvoiceNumber();
+				mainSQL.UpdateInvoices(invoiceNum, totalCost);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
+		}
+
+		public void DeleteInvoice()
+		{
+			try
+			{
+				//get invoice number
+				string invoiceNum = GetInvoiceNumber();
+				mainSQL.DeleteInvoices(invoiceNum);
 			}
 			catch (Exception ex)
 			{

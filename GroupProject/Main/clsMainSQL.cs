@@ -122,6 +122,7 @@ namespace GroupProject
 		}
 
 		/// <summary>
+		/// MIGHT NOT NEED THIS
 		/// Query to get item code, description, and cost in line items based on item code and invoice number
 		/// </summary>
 		/// <param name="invoiceNum"></param>
@@ -141,6 +142,8 @@ namespace GroupProject
 
 		/// <summary>
 		/// Query to add an Item to LineItems.
+		/// MIGHT NOT NEED THIS
+		/// 
 		/// </summary>
 		/// <param name="invoiceNum"></param>
 		/// <param name="lineItemNum"></param>
@@ -165,17 +168,12 @@ namespace GroupProject
 		/// <param name="invoiceDate"></param>
 		/// <param name="totalCost"></param>
 		/// <returns></returns>
-		public DataSet InsertInvoices(string invoiceDate, int totalCost)
+		public void InsertInvoices(string invoiceDate, string totalCost)
 		{
 			try
 			{
-				var sql = @"INSERT INTO Invoices(InvoiceDate, TotalCost) Values(@invoiceDate}, { @totalCost})";
-
-				return ds = db.ExecuteSQLStatement(sql, ref returnValues, (OleDbCommand cmd) =>
-				{
-					cmd.Parameters.AddWithValue("@invoiceDate", invoiceDate);
-					cmd.Parameters.AddWithValue("@totalCost", totalCost);
-				});
+				var sql = "INSERT INTO Invoices(InvoiceDate, TotalCost) Values(#" +invoiceDate + "#," +totalCost + ")";
+				db.ExecuteNonQuery(sql);
 			}
 			catch (Exception ex)
 			{
@@ -184,22 +182,15 @@ namespace GroupProject
 		}
 
 		/// <summary>
-		/// gets invoice number based on invoice date and total cost
+		/// gets invoice number based on invoice
 		/// </summary>
-		/// <param name="invoiceDate"></param>
-		/// <param name="totalCost"></param>
 		/// <returns></returns>
-		public DataSet GetInvoiceNum(string invoiceDate, int totalCost)
+		public DataSet GetInvoiceNum()
 		{
 			try
 			{
-				var sql = @"SELECT InvoiceNum FROM Invoices WHERE InvoiceDate = @invoiceDate AND TotalCost = @totalCost";
-
-				return ds = db.ExecuteSQLStatement(sql, ref returnValues, (OleDbCommand cmd) =>
-				{
-					cmd.Parameters.AddWithValue("@invoiceDate", invoiceDate);
-					cmd.Parameters.AddWithValue("@totalCost", totalCost);
-				});
+				string sql = "SELECT MAX(InvoiceNum) FROM Invoices";
+				return db.ExecuteSQLStatement(sql, ref returnValues);
 			}
 			catch (Exception ex)
 			{
@@ -213,11 +204,12 @@ namespace GroupProject
 		/// <param name="invoiceNum"></param>
 		/// <param name="cost"></param>
 		/// <returns></returns>
-		public string UpdateInvoices(int invoiceNum, int cost)
+		public void UpdateInvoices(string invoiceNum, string cost)
 		{
 			try
 			{
-				return $"UPDATE Invoices SET TotalCost = {cost} WHERE InvoiceNum = {invoiceNum}";
+				string sql = "UPDATE Invoices SET TotalCost =" + cost +" WHERE InvoiceNum = " + invoiceNum;
+				db.ExecuteNonQuery(sql);
 			}
 			catch (Exception ex)
 			{
@@ -249,11 +241,12 @@ namespace GroupProject
 		/// </summary>
 		/// <param name="invoiceNum"></param>
 		/// <returns></returns>
-		public string DeleteInvoices(int invoiceNum)
+		public void DeleteInvoices(string invoiceNum)
 		{
 			try
 			{
-				return $"DELETE FROM Invoices WHERE InvoiceNum = {invoiceNum}";
+				string sql = "DELETE FROM Invoices WHERE InvoiceNum = " +invoiceNum;
+				db.ExecuteNonQuery(sql);
 			}
 			catch (Exception ex)
 			{

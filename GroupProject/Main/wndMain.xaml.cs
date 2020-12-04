@@ -55,6 +55,7 @@ namespace GroupProject
 
 
 
+
 		/// <summary>
 		/// Constructor for Main Window
 		/// </summary>
@@ -113,7 +114,6 @@ namespace GroupProject
 				//enable other features
 				cboItemSelection.IsEnabled = true;
 				addItemButton.IsEnabled = true;
-				editButton.IsEnabled = true;
 				saveButton.IsEnabled = true;
 				invoiceDate.IsEnabled = true;
 				total = 0;
@@ -135,8 +135,10 @@ namespace GroupProject
 		{
 			try
 			{
-				//make invoice not read only
-				dgInvoice.IsReadOnly = false;
+				//enable datagrid
+				dgInvoice.IsEnabled = true;
+				//set global editing to true
+				editing = true;
 			}
 			catch (Exception ex)
 			{
@@ -273,13 +275,11 @@ namespace GroupProject
 				else
 				{
 					total -= Int32.Parse(itemInfo[2]);
-
 				}
 				//make sure total doesn't go less than 0
 				if (total < 0)
 				{
 					totalTextbox.Text = 0.ToString();
-
 				}
 				else
 				{
@@ -305,22 +305,40 @@ namespace GroupProject
 		{
 			try
 			{
-				//if no date entered
-				if (invoiceDate.Text == "")
+				//if the data is not being edited
+				if (!editing)
 				{
-					MessageBox.Show("Please select a date.");
+					//if no date entered
+					if (invoiceDate.Text == "")
+					{
+						MessageBox.Show("Please select a date.");
+					}
+					//if nothing added to invoice
+					else if (dgInvoice.Items.Count == 0)
+					{
+						MessageBox.Show("Please add an item");
+					}
+					else
+					{
+						//save invoice
+						mainLogic.SaveInvoice(invoiceDate.SelectedDate.ToString(), costTextbox.Text);
+						//set invoice number
+						invoiceNum.Content = mainLogic.GetInvoiceNumber();
+
+						//change invoice to read only mode
+						dgInvoice.IsEnabled = false;
+						//enable delete and edit buttons
+						deleteButton.IsEnabled = true;
+						editButton.IsEnabled = true;
+					}
 				}
-				//if nothing added to invoice
-				else if (dgInvoice.Items.Count == 0)
-				{
-					MessageBox.Show("Please add an item");
-				}
+				//if the data is being edited
 				else
 				{
-					//save invoice
-					mainLogic.SaveInvoice(invoiceDate.SelectedDate.ToString(), Int32.Parse(costTextbox.Text));
-					//change invoice to read only mode
-					dgInvoice.IsReadOnly = true;
+					//update invoice
+					mainLogic.UpdateInvoice(costTextbox.Text);
+					//end editing
+					editing = false;
 				}
 			}
 			catch (Exception ex)
