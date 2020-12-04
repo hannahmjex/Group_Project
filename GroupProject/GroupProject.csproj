@@ -76,6 +76,10 @@
     <Compile Include="Search\wndSearch.xaml.cs">
       <DependentUpon>wndSearch.xaml</DependentUpon>
     </Compile>
+    <Page Include="BureauBlue.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Items\wndItems.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

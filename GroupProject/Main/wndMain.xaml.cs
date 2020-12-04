@@ -1,6 +1,7 @@
 ﻿using GroupProject.Main;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 
@@ -85,12 +86,12 @@ namespace GroupProject
 			try
 			{
 				var items = mainLogic.GetAllItems();
-				cboItemSelection.ItemsSource = items;
+				cboItemSelection.ItemsSource = items.Select(x => x.Description).Distinct();
 			}
 			catch (Exception ex)
 			{
-				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-									   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+				exceptionHandling.HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+							MethodInfo.GetCurrentMethod().Name, ex.Message);
 			}
 		}
 

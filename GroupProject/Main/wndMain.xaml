@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 	<Grid>
-		<Menu Margin="0,0,0,0.5">
+		<Menu Margin="0,0,0,389.5">
 			<MenuItem Header="Menu">
 				<MenuItem Header="Update" Click="UpdateMenuItem_Click"/>
 				<MenuItem Header="Search Invoice" Click="SearchMenuItem_Click" Margin="0,0,-3,0"/>
@@ -22,17 +22,17 @@
 			</DataGrid.Columns>
 		</DataGrid>
 		<DatePicker x:Name="invoiceDate" IsEnabled="false" Margin="52,266,616,118.5" RenderTransformOrigin="0.509,0.649"/>
-		<ComboBox x:Name="cboItemSelection" DisplayMemberPath="ItemDesc" Margin="329,28,278,358.5" IsEnabled="False" SelectionChanged="cboItemSelection_SelectionChanged"/>
+		<ComboBox x:Name="cboItemSelection" DisplayMemberPath="Description" Margin="330,33,277,353.5" IsEnabled="False" SelectionChanged="cboItemSelection_SelectionChanged"/>
 		<Button x:Name="addItemButton" IsEnabled="False" Content="Add Item" HorizontalAlignment="Left" Margin="641,88,0,0" VerticalAlignment="Top" Width="120" Click="addButton_Click" Height="28"/>
 		<Button x:Name="newButton" Content="New Invoice" HorizontalAlignment="Left" Margin="52,38,0,0" VerticalAlignment="Top" Width="120" Click="newButton_Click" Height="26" RenderTransformOrigin="-0.377,0.327"/>
 		<Button x:Name="editButton" IsEnabled="False" Content="Edit Invoice" HorizontalAlignment="Left" Margin="52,78,0,0" VerticalAlignment="Top" Width="120" Click="editButton_Click" Height="26"/>
 		<Button x:Name="deleteButton" IsEnabled="False" Content="Delete Invoice" HorizontalAlignment="Left" Margin="52,117,0,0" VerticalAlignment="Top" Width="120" Click="deleteButton_Click" Height="26"/>
 		<Button x:Name="saveButton" IsEnabled="False" Content="Save Invoice" HorizontalAlignment="Left" Margin="52,159,0,0" VerticalAlignment="Top" Width="120" Click="saveButton_Click" Height="26"/>
 		<Button x:Name="removeItemButton" IsEnabled="False" Content="Remove Item" HorizontalAlignment="Left" Margin="641,140,0,0" VerticalAlignment="Top" Width="120" Click="removeItemButton_Click" Height="28"/>
-		<TextBox x:Name="costTextbox" IsReadOnly="true" TextWrapping="Wrap" Text="" Margin="714,38,47,358.5"/>
-		<Label x:Name="invoiceNum" Content="TBD" Margin="143,318,607,64.5"/>
+		<TextBox x:Name="costTextbox" IsReadOnly="true" TextWrapping="Wrap" Text="" Margin="708,33,47,353.5"/>
+		<Label x:Name="invoiceNum" Content="TBD" Margin="148,318,602,64.5"/>
 		<Label Content="Invoice Date:" Margin="78,233,633,156.5"/>
-		<TextBox x:Name="totalTextbox" IsReadOnly="true" TextWrapping="Wrap" Text="0" Margin="134,197,623,201.5"/>
+		<TextBox x:Name="totalTextbox" IsReadOnly="true" TextWrapping="Wrap" Text="0" Margin="127,197,623,194.5"/>
 		<Label Content="Total: $" Margin="52,198,678,189.5"/>
 		<Label Content="Cost: $" Margin="629,38,112,349.5"/>
 	</Grid>
