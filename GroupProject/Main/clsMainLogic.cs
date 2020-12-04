@@ -3,10 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroupProject
 {
@@ -44,6 +41,11 @@ namespace GroupProject
 			}
 		}
 
+		/// <summary>
+		/// This method gets the item info from the item descriptions
+		/// </summary>
+		/// <param name="itemDesc"></param>
+		/// <returns></returns>
 		public List<string> GetItemRow(string itemDesc)
 		{
 			try
@@ -59,7 +61,86 @@ namespace GroupProject
 			}
 			catch (Exception ex)
 			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
+		}
 
+		/// <summary>
+		/// saves the invoice
+		/// </summary>
+		/// <param name="invoiceDate"></param>
+		/// <param name="totalCost"></param>
+		/// <returns></returns>
+		public void SaveInvoice(string invoiceDate, string totalCost)
+		{ 
+			try
+			{
+				//save invoice
+				mainSQL.InsertInvoices(invoiceDate, totalCost);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
+		}
+
+		/// <summary>
+		/// returns invoice number
+		/// </summary>
+		/// <returns></returns>
+		public string GetInvoiceNumber()
+		{
+			try
+			{
+				//get invoice number
+				DataSet invoiceNum = mainSQL.GetInvoiceNum();
+				List<string> invoiceNumString = new List<string>();
+
+				//extract invoice number and add to list bc idk how else to do this
+				for (int i = 0; i < invoiceNum.Tables[0].Columns.Count; i++)
+				{
+					invoiceNumString.Add(invoiceNum.Tables[0].Rows[0][i].ToString());
+				}
+				return invoiceNumString[0];
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
+		}
+
+		/// <summary>
+		/// updates the invoice
+		/// </summary>
+		/// <param name="totalCost"></param>
+		public void UpdateInvoice(string totalCost)
+		{
+			try
+			{
+				//get invoice number
+				string invoiceNum = GetInvoiceNumber();
+				mainSQL.UpdateInvoices(invoiceNum, totalCost);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
+		}
+
+		/// <summary>
+		/// calls sql statement to delete the invoice
+		/// </summary>
+		public void DeleteInvoice()
+		{
+			try
+			{
+				//get invoice number
+				string invoiceNum = GetInvoiceNumber();
+				mainSQL.DeleteInvoices(invoiceNum);
+				mainSQL.DeleteLineItems(invoiceNum);
+			}
+			catch (Exception ex)
+			{
 				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
 			}
 		}

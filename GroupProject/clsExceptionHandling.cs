@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace GroupProject
 {
-	public class clsExceptionHandling
+	class clsExceptionHandling
 	{
 		/// <summary>
 		/// Outputs the class, method, and message for the exception thrown
@@ -27,5 +27,5 @@ namespace GroupProject
 			}
 		}
 	}
-}
 
+}
