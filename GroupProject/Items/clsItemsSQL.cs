@@ -96,15 +96,21 @@ namespace GroupProject.Items
         /// </summary>
         /// <param name="Code">Item's Code</param>
         /// <returns>boolean representing uniqueness of the code</returns>
-        public bool CheckUniqueCode(string Code)
+        public string CheckUniqueCode(string Code)
         {
             try
             {
-                Cmd = new OleDbCommand("SELECT ItemCode FROM ItemDesc WHERE ItemCode = @Code");
-                Cmd.Parameters.Add("@Code", OleDbType.WChar).Value = Code;
+                
+                string sql = "SELECT ItemCode FROM ItemDesc WHERE ItemCode =" + Code;
 
-                return db.ExecuteScalarSQL(Cmd) == "";
-            }
+                //Cmd = new OleDbCommand("SELECT ItemCode FROM ItemDesc WHERE ItemCode = @Code");
+                //Cmd.Parameters.Add("@Code", OleDbType.WChar).Value = Code;
+
+                //return db.ExecuteScalarSQL(Cmd) == "";
+                string code = db.ExecuteScalarSQL(sql);
+                return code; 
+                //Do logic for boolean in itemLogic
+			}
             catch (Exception ex)
             {
                 throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
@@ -122,12 +128,15 @@ namespace GroupProject.Items
         {
             try
             {
-                Cmd = new OleDbCommand("INSERT INTO ItemDesc(ItemCode, ItemDesc, Cost) VALUES (@Code, @Desc, @Cost)");
-                Cmd.Parameters.Add("@Code", OleDbType.WChar).Value = Code;
-                Cmd.Parameters.Add("@Desc", OleDbType.WChar).Value = Desc;
-                Cmd.Parameters.Add("@Cost", OleDbType.Integer).Value = Cost;
+                string sql = @"INSERT INTO ItemDesc(ItemCode, ItemDesc, Cost) VALUES ("+Code+", "+Desc+", "+Cost+")";
+                //Cmd = new OleDbCommand("INSERT INTO ItemDesc(ItemCode, ItemDesc, Cost) VALUES (@Code, @Desc, @Cost)");
+                //Cmd.Parameters.Add("@Code", OleDbType.WChar).Value = Code;
+                //Cmd.Parameters.Add("@Desc", OleDbType.WChar).Value = Desc;
+                //Cmd.Parameters.Add("@Cost", OleDbType.Integer).Value = Cost;
 
-                db.ExecuteNonQuery(Cmd);
+                //db.ExecuteNonQuery(Cmd);
+
+                db.ExecuteNonQuery(sql);
             }
             catch (Exception ex)
             {
@@ -144,7 +153,7 @@ namespace GroupProject.Items
         {
             try
             {
-                string sql = "DELETE FROM ItemDesc WHERE ItemCode = {Code}";
+                string sql = "DELETE FROM ItemDesc WHERE ItemCode = " +Code;
 
                // Cmd = new OleDbCommand("DELETE FROM ItemDesc WHERE ItemCode = @Code");
                 //Cmd.Parameters.Add("@Code", OleDbType.WChar).Value = Code;
@@ -168,28 +177,30 @@ namespace GroupProject.Items
         {
             try
             {
-                Cmd = new OleDbCommand("UPDATE ItemDesc SET ");
+                string sql = "UPDATE ItemDesc SET ItemDesc =" + Desc + " AND cost =" + Cost + "AND code =" + Code + "WHERE ItemCode =" + Code;
+                // Cmd = new OleDbCommand("UPDATE ItemDesc SET ");
 
-                //If a new description is provided then add it to the SET clause
-                if (Desc != null)
-                {
-                    Cmd.CommandText += "ItemDesc = '" + Desc + "'";
-                }
-                if (Cost != null)
-                {
-                    //If a new cost is provided as well as desc then add a comma, otherwise just add cost to SET clause
-                    if (Desc != null)
-                    {
-                        Cmd.CommandText += ", Cost = '" + Cost + "'";
-                    }
-                    else
-                    {
-                        Cmd.CommandText += "Cost = '" + Cost + "'";
-                    }
-                }
-                Cmd.CommandText += " WHERE ItemCode = '" + Code + "'";
+                ////If a new description is provided then add it to the SET clause
+                //if (Desc != null)
+                //{
+                //    Cmd.CommandText += "ItemDesc = '" + Desc + "'";
+                //}
+                //if (Cost != null)
+                //{
+                //    //If a new cost is provided as well as desc then add a comma, otherwise just add cost to SET clause
+                //    if (Desc != null)
+                //    {
+                //        Cmd.CommandText += ", Cost = '" + Cost + "'";
+                //    }
+                //    else
+                //    {
+                //        Cmd.CommandText += "Cost = '" + Cost + "'";
+                //    }
+                //}
+                //Cmd.CommandText += " WHERE ItemCode = '" + Code + "'";
 
-                db.ExecuteNonQuery(Cmd);
+                //db.ExecuteNonQuery(Cmd);
+                db.ExecuteNonQuery(sql);
             }
             catch (Exception ex)
             {
