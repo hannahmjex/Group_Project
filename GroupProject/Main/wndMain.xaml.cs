@@ -1,8 +1,6 @@
 ﻿using GroupProject.Main;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
 using System.Reflection;
 using System.Windows;
 
@@ -34,27 +32,24 @@ namespace GroupProject
 		clsExceptionHandling exceptionHandling;
 
 		/// <summary>
-		/// dataset ds
+		/// list of added items
 		/// </summary>
-		DataSet ds;
-
-		/// <summary>
-		/// observable collection of items
-		/// </summary>
-		List<string> items;
-
 		List<string> addedItems;
+
 		/// <summary>
 		/// boolean to tell if the invoice is being edited
 		/// </summary>
 		bool editing;
 
+		/// <summary>
+		/// list of item information
+		/// </summary>
 		List<string> itemInfo;
 
+		/// <summary>
+		/// total cost
+		/// </summary>
 		int total;
-
-
-
 
 		/// <summary>
 		/// Constructor for Main Window
@@ -71,8 +66,6 @@ namespace GroupProject
 				exceptionHandling = new clsExceptionHandling();
 				addedItems = new List<string>();
 				itemInfo = new List<string>();
-				items = new List<string>();
-				ds = new DataSet();
 				addedItems = new List<string>();
 				total = 0;
 				FillItemSelectionBox();
@@ -111,6 +104,11 @@ namespace GroupProject
 		{
 			try
 			{
+				//if there are items in the datagrid
+				if (dgInvoice.Items.Count != 0)
+				{
+					dgInvoice.Items.Clear();
+				}
 				//enable other features
 				cboItemSelection.IsEnabled = true;
 				addItemButton.IsEnabled = true;
@@ -360,6 +358,21 @@ namespace GroupProject
 			{
 				dgInvoice.Items.Clear();
 				//call sql statement to delete invoice
+				mainLogic.DeleteInvoice();
+
+				//disable features
+				cboItemSelection.IsEnabled = false;
+				addItemButton.IsEnabled = false;
+				saveButton.IsEnabled = false;
+				invoiceDate.IsEnabled = false;
+				editButton.IsEnabled = false;
+				invoiceDate.IsEnabled = false;
+
+				//reset features
+				invoiceDate.SelectedDate = null;
+				cboItemSelection.SelectedItem = "";
+				costTextbox.Text = "";
+
 			}
 			catch (Exception ex)
 			{

@@ -127,6 +127,9 @@ namespace GroupProject
 			}
 		}
 
+		/// <summary>
+		/// calls sql statement to delete the invoice
+		/// </summary>
 		public void DeleteInvoice()
 		{
 			try
@@ -134,6 +137,7 @@ namespace GroupProject
 				//get invoice number
 				string invoiceNum = GetInvoiceNumber();
 				mainSQL.DeleteInvoices(invoiceNum);
+				mainSQL.DeleteLineItems(invoiceNum);
 			}
 			catch (Exception ex)
 			{

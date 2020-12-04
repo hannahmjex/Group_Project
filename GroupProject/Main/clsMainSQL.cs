@@ -223,11 +223,12 @@ namespace GroupProject
 		/// </summary>
 		/// <param name="invoiceNum"></param>
 		/// <returns></returns>
-		public string DeleteLineItems(int invoiceNum)
+		public void DeleteLineItems(string invoiceNum)
 		{
 			try
 			{
-				return $"DELETE FROM LineItems WHERE InvoiceNum = {invoiceNum}";
+				string sql = "DELETE FROM LineItmes WHERE InvoiceNum = " + invoiceNum;
+				db.ExecuteNonQuery(sql);
 			}
 			catch (Exception ex)
 			{
