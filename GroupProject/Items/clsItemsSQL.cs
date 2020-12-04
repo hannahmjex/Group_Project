@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
@@ -13,194 +14,219 @@ namespace GroupProject.Items
     public class clsItemsSQL
     {
         /// <summary>
-        /// Connection string to the database.
+        /// Values to be returned
         /// </summary>
-        private string sConnectionString;
+        int returnValues;
 
         /// <summary>
-        /// Constructor that sets the connection string to the database
+        /// DataAccess Object Declaration
         /// </summary>
-		public clsItemsSQL()
-        {
-            sConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data source= " + Directory.GetCurrentDirectory() + "\\Invoice.mdb";
-        }
+        private clsDataAccess db;
 
         /// <summary>
-        /// This method takes an SQL statment that is passed in and executes it.  The resulting values
-        /// are returned in a DataSet.  The number of rows returned from the query will be put into
-        /// the reference parameter iRetVal.
+        /// DataSet Object Declaration
         /// </summary>
-        /// <param name="sSQL">The SQL statement to be executed.</param>
-        /// <param name="iRetVal">Reference parameter that returns the number of selected rows.</param>
-        /// <returns>Returns a DataSet that contains the data from the SQL statement.</returns>
-		public DataSet ExecuteSQLStatement(string sSQL, ref int iRetVal)
+        private DataSet ds;
+
+        /// <summary>
+        /// OleDbCommand Object Declaration
+        /// </summary>
+        private OleDbCommand Cmd;
+
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        public clsItemsSQL()
         {
             try
             {
-                //Create a new DataSet
-                DataSet ds = new DataSet();
+                db = new clsDataAccess();
+                ds = new DataSet();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+        }
 
-                using (OleDbConnection conn = new OleDbConnection(sConnectionString))
+        /// <summary>
+        /// Retrieves all Items 
+        /// </summary>
+        /// <returns>An ObservableCollection of all Items</returns>
+        public ObservableCollection<Item> GetAllItems()
+        {
+            try
+            {
+                ObservableCollection<Item> items = new ObservableCollection<Item>();
+                ds = db.ExecuteSQLStatement("SELECT ItemCode, ItemDesc, Cost FROM ItemDesc", ref returnValues);
+
+
+                // Iterate over rows
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    using (OleDbDataAdapter adapter = new OleDbDataAdapter())
+                    // Grab data from their columns for each row
+                    string itemCode = ds.Tables[0].Rows[i][0].ToString();
+                    string itemDescription = ds.Tables[0].Rows[i][1].ToString();
+                    string itemCost = ds.Tables[0].Rows[i][2].ToString();
+
+                    // Create new local item object
+                    Item item = new Item(Convert.ToChar(itemCode), itemDescription, Convert.ToInt32(itemCost));
+
+                    // Add newly created item object to local collection of items.
+                    items.Add(item);
+                }
+                /*
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    items.Add(new Item(Convert.ToChar(dr[0]), dr[1].ToString(), Convert.ToInt32(dr[2])));
+                }*/
+
+                return items;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+        }
+        
+        /// <summary>
+        /// Checks if the provided Item Code does not exist
+        /// </summary>
+        /// <param name="Code">Item's Code</param>
+        /// <returns>boolean representing uniqueness of the code</returns>
+        public bool CheckUniqueCode(string Code)
+        {
+            try
+            {
+                Cmd = new OleDbCommand("SELECT ItemCode FROM ItemDesc WHERE ItemCode = @Code");
+                Cmd.Parameters.Add("@Code", OleDbType.WChar).Value = Code;
+
+                return db.ExecuteScalarSQL(Cmd) == "";
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                                       MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Inserts a new Item
+        /// </summary>
+        /// <param name="Code">Item's Code</param>
+        /// <param name="Desc">Item's Description</param>
+        /// <param name="Cost">Item's Cost</param>
+        public void InsertNewItem(string Code, string Desc, string Cost)
+        {
+            try
+            {
+                Cmd = new OleDbCommand("INSERT INTO ItemDesc(ItemCode, ItemDesc, Cost) VALUES (@Code, @Desc, @Cost)");
+                Cmd.Parameters.Add("@Code", OleDbType.WChar).Value = Code;
+                Cmd.Parameters.Add("@Desc", OleDbType.WChar).Value = Desc;
+                Cmd.Parameters.Add("@Cost", OleDbType.Integer).Value = Cost;
+
+                db.ExecuteNonQuery(Cmd);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Deletes an Item 
+        /// </summary>
+        /// <param name="Code">Item to delete's code</param>
+        public void DeleteItem(string Code)
+        {
+            try
+            {
+                string sql = "DELETE FROM ItemDesc WHERE ItemCode = {Code}";
+
+               // Cmd = new OleDbCommand("DELETE FROM ItemDesc WHERE ItemCode = @Code");
+                //Cmd.Parameters.Add("@Code", OleDbType.WChar).Value = Code;
+
+                db.ExecuteNonQuery(sql);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Updates an Item
+        /// </summary>
+        /// <param name="Code">Item's Code</param>
+        /// <param name="Desc">Item's Description</param>
+        /// <param name="Cost">Item's Cost</param>
+        public void UpdateItem(char Code, string Desc, string Cost)
+        {
+            try
+            {
+                Cmd = new OleDbCommand("UPDATE ItemDesc SET ");
+
+                //If a new description is provided then add it to the SET clause
+                if (Desc != null)
+                {
+                    Cmd.CommandText += "ItemDesc = '" + Desc + "'";
+                }
+                if (Cost != null)
+                {
+                    //If a new cost is provided as well as desc then add a comma, otherwise just add cost to SET clause
+                    if (Desc != null)
                     {
-
-                        //Open the connection to the database
-                        conn.Open();
-
-                        //Add the information for the SelectCommand using the SQL statement and the connection object
-                        adapter.SelectCommand = new OleDbCommand(sSQL, conn);
-                        adapter.SelectCommand.CommandTimeout = 0;
-
-                        //Fill up the DataSet with data
-                        adapter.Fill(ds);
+                        Cmd.CommandText += ", Cost = '" + Cost + "'";
+                    }
+                    else
+                    {
+                        Cmd.CommandText += "Cost = '" + Cost + "'";
                     }
                 }
+                Cmd.CommandText += " WHERE ItemCode = '" + Code + "'";
 
-                //Set the number of values returned
-                iRetVal = ds.Tables[0].Rows.Count;
-
-                //return the DataSet
-                return ds;
+                db.ExecuteNonQuery(Cmd);
             }
             catch (Exception ex)
             {
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
         }
 
         /// <summary>
-        /// This method takes an SQL statment that is passed in and executes it.  The resulting single 
-        /// value is returned.
+        /// Checks if an Item exists on any Invoice
         /// </summary>
-        /// <param name="sSQL">The SQL statement to be executed.</param>
-        /// <returns>Returns a string from the scalar SQL statement.</returns>
-		public string ExecuteScalarSQL(string sSQL)
+        /// <param name="SelectedItem">Item to check for</param>
+        /// <returns>A List of Invoice Numbers on which the Item exists</returns>
+        public List<int> CheckItemOnInvoice(Item SelectedItem)
         {
             try
             {
-                //Holds the return value
-                object obj;
+                List<int> invoiceNums = new List<int>();
+                Cmd = new OleDbCommand("SELECT DISTINCT InvoiceNum FROM LineItems WHERE ItemCode = @ItemCode");
+                Cmd.Parameters.Add("@ItemCode", OleDbType.WChar).Value = SelectedItem.Code;
 
-                using (OleDbConnection conn = new OleDbConnection(sConnectionString))
+                int retVal = 0;
+
+                ds = db.ExecuteSQLStatement(Cmd, ref retVal);
+
+                foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    using (OleDbDataAdapter adapter = new OleDbDataAdapter())
-                    {
-
-                        //Open the connection to the database
-                        conn.Open();
-
-                        //Add the information for the SelectCommand using the SQL statement and the connection object
-                        adapter.SelectCommand = new OleDbCommand(sSQL, conn);
-                        adapter.SelectCommand.CommandTimeout = 0;
-
-                        //Execute the scalar SQL statement
-                        obj = adapter.SelectCommand.ExecuteScalar();
-                    }
+                    invoiceNums.Add(Convert.ToInt32(dr[0]));
                 }
 
-                //See if the object is null
-                if (obj == null)
-                {
-                    //Return a blank
-                    return "";
-                }
-                else
-                {
-                    //Return the value
-                    return obj.ToString();
-                }
+                return invoiceNums;
             }
             catch (Exception ex)
             {
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                    MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
             }
-        }
-
-        /// <summary>
-        /// This method takes an SQL statment that is a non query and executes it.
-        /// </summary>
-        /// <param name="sSQL">The SQL statement to be executed.</param>
-        /// <returns>Returns the number of rows affected by the SQL statement.</returns>
-        public int ExecuteNonQuery(string sSQL)
-        {
-            try
-            {
-                //Number of rows affected
-                int iNumRows;
-
-                using (OleDbConnection conn = new OleDbConnection(sConnectionString))
-                {
-                    //Open the connection to the database
-                    conn.Open();
-
-                    //Add the information for the SelectCommand using the SQL statement and the connection object
-                    OleDbCommand cmd = new OleDbCommand(sSQL, conn);
-                    cmd.CommandTimeout = 0;
-
-                    //Execute the non query SQL statement
-                    iNumRows = cmd.ExecuteNonQuery();
-                }
-
-                //return the number of rows affected
-                return iNumRows;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Query to get all item info from the database.
-        /// </summary>
-        /// <returns></returns>
-        public string GetItemsDesc()
-        {
-            return "SELECT * FROM ItemDesc";
-        }
-
-        /// <summary>
-        /// Query to select count of invoices in LineItems based on a ItemCode.
-        /// </summary>
-        /// <param name="itemCode">The ItemCode of the Item to check.</param>
-        /// <returns></returns>
-        public string ItemsInInvoiceCount(string itemCode)
-        {
-            return $"SELECT distinctCOUNT(InvoiceNum) FROM LineItems WHERE ItemCode = {itemCode}";
-        }
-
-        /// <summary>
-        /// Query to add an Item to the database.
-        /// </summary>
-        /// <param name="description">The Item description</param>
-        /// <param name="cost">The Item cost</param>
-        /// <returns></returns>
-        public string AddItems(string description, string cost)
-        {
-            return $"INSERT INTO ItemDesc (ItemDesc, Cost) VALUES ('{description}', {cost})";
-        }
-
-        /// <summary>
-        /// Query to update an Item from the database.
-        /// </summary>
-        /// <param name="itemCode">The itemcode of the Item to update</param>
-        /// <param name="description">The description of the Item to update</param>
-        /// <param name="cost">The cost of the Item to update</param>
-        /// <returns></returns>
-        public string UpdateItems(string itemCode, string description, string cost)
-        {
-            return $"UPDATE ItemDesc SET ItemDesc = '{description}', Cost = {cost} WHERE ItemCode = {itemCode}";
-        }
-
-        /// <summary>
-        /// Query to delete an Item from the database.
-        /// </summary>
-        /// <param name="itemCode">The ItemCode of the Item to delete</param>
-        /// <returns></returns>
-        public string DeleteItems(string itemCode)
-        {
-            return $"DELETE FROM ItemDesc WHERE ItemCode = {itemCode}";
         }
     }
 }
