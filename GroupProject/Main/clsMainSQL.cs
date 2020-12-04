@@ -1,14 +1,9 @@
 ﻿using GroupProject.Main;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.OleDb;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace GroupProject
@@ -123,7 +118,6 @@ namespace GroupProject
 		}
 
 		/// <summary>
-		/// MIGHT NOT NEED THIS
 		/// Query to get item code, description, and cost in line items based on item code and invoice number
 		/// </summary>
 		/// <param name="invoiceNumber"></param>
@@ -135,7 +129,6 @@ namespace GroupProject
                 // Create local invoices collection
                 ObservableCollection<Item> items = new ObservableCollection<Item>();
 
-                //var sql = $"SELECT * FROM LineItems WHERE InvoicNum = @invoiceNum";
                 var sql =  $"SELECT LineItems.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost FROM LineItems, ItemDesc Where LineItems.ItemCode = ItemDesc.ItemCode And LineItems.InvoiceNum = " + invoiceNumber;
 
                 var ds = db.ExecuteSQLStatement(sql, ref returnValues);
@@ -154,7 +147,6 @@ namespace GroupProject
                     // Add newly created item object to local collection of items.
                     items.Add(item);
                 }
-
                 return items;
             }
 			catch (Exception ex)
@@ -166,25 +158,24 @@ namespace GroupProject
 
 		/// <summary>
 		/// Query to add an Item to LineItems.
-		/// MIGHT NOT NEED THIS
-		/// 
-		/// </summary>
-		/// <param name="invoiceNum"></param>
-		/// <param name="lineItemNum"></param>
-		/// <param name="itemCode"></param>
-		/// <returns></returns>
-		public string InsertLineItems(int invoiceNum, int lineItemNum, string itemCode)
-		{
-			try
-			{
-				return $"INSERT INTO LineItems (InvoiceNum, LineitemNum, ItemCode) VALUES ({invoiceNum}, {lineItemNum}, '{itemCode}')";
-			}
-			catch (Exception ex)
-			{
-				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-													   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-			}
-		}
+		///// MIGHT NOT NEED THIS
+		///// </summary>
+		///// <param name="invoiceNum"></param>
+		///// <param name="lineItemNum"></param>
+		///// <param name="itemCode"></param>
+		///// <returns></returns>
+		//public string InsertLineItems(int invoiceNum, int lineItemNum, string itemCode)
+		//{
+		//	try
+		//	{
+		//		return $"INSERT INTO LineItems (InvoiceNum, LineitemNum, ItemCode) VALUES ({invoiceNum}, {lineItemNum}, '{itemCode}')";
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+		//											   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+		//	}
+		//}
 
 		/// <summary>
 		/// Query to add an Item to Invoices.
