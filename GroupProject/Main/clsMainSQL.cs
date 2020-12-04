@@ -75,8 +75,8 @@ namespace GroupProject
 			}
 			catch (Exception ex)
 			{
-
-				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+													   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
 			}
 		}
 
@@ -89,20 +89,17 @@ namespace GroupProject
 		{
 			try
 			{
-				ObservableCollection<Item> items = new ObservableCollection<Item>();
-				
 				var sql = @"SELECT ItemCode, ItemDesc, Cost FROM ItemDesc WHERE ItemDesc = @itemDesc";
-				//ds = db.ExecuteSQLStatement("SELECT ItemCode, ItemDesc, Cost FROM ItemDesc WHERE itemDesc = '" + itemDesc + "'", ref returnValues);
-		
-				return ds = db.ExecuteSQLStatement(sql, ref returnValues, (OleDbCommand cmd) => {
+				
+				return ds = db.ExecuteSQLStatement(sql, ref returnValues, (OleDbCommand cmd) =>
+				{
 					cmd.Parameters.AddWithValue("@itemDesc", itemDesc);
 				});
-		
-				
 			}
 			catch (Exception ex)
 			{
-				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+													   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
 			}
 		}
 
@@ -113,7 +110,15 @@ namespace GroupProject
 		/// <returns></returns>
 		public string SelectFromInvoices(int invoiceNum)
 		{
-			return $"SELECT InvoiceNum, InvoiceDate, TotalCost FROM Invoices WHERE InvoiceNum = {invoiceNum}";
+			try
+			{
+				return $"SELECT InvoiceNum, InvoiceDate, TotalCost FROM Invoices WHERE InvoiceNum = {invoiceNum}";
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+													   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
 		}
 
 		/// <summary>
@@ -123,7 +128,15 @@ namespace GroupProject
 		/// <returns></returns>
 		public string SelectFromLineItems(int invoiceNum)
 		{
-			return $"SELECT LineItems.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost FROM LineItems, ItemDesc Where LineItems.ItemCode = ItemDesc.ItemCode And LineItems.InvoiceNum = {invoiceNum}";
+			try
+			{
+				return $"SELECT LineItems.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost FROM LineItems, ItemDesc Where LineItems.ItemCode = ItemDesc.ItemCode And LineItems.InvoiceNum = {invoiceNum}";
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+													   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
 		}
 
 		/// <summary>
@@ -135,7 +148,15 @@ namespace GroupProject
 		/// <returns></returns>
 		public string InsertLineItems(int invoiceNum, int lineItemNum, string itemCode)
 		{
-			return $"INSERT INTO LineItems (InvoiceNum, LineitemNum, ItemCode) VALUES ({invoiceNum}, {lineItemNum}, '{itemCode}')";
+			try
+			{
+				return $"INSERT INTO LineItems (InvoiceNum, LineitemNum, ItemCode) VALUES ({invoiceNum}, {lineItemNum}, '{itemCode}')";
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+													   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
 		}
 
 		/// <summary>
@@ -144,9 +165,46 @@ namespace GroupProject
 		/// <param name="invoiceDate"></param>
 		/// <param name="totalCost"></param>
 		/// <returns></returns>
-		public string InsertInvoices(string invoiceDate, int totalCost)
+		public DataSet InsertInvoices(string invoiceDate, int totalCost)
 		{
-			return $"INSERT INTO Invoices (InvoiceDate, TotalCost) Values ('{invoiceDate}', {totalCost})";
+			try
+			{
+				var sql = @"INSERT INTO Invoices(InvoiceDate, TotalCost) Values(@invoiceDate}, { @totalCost})";
+
+				return ds = db.ExecuteSQLStatement(sql, ref returnValues, (OleDbCommand cmd) =>
+				{
+					cmd.Parameters.AddWithValue("@invoiceDate", invoiceDate);
+					cmd.Parameters.AddWithValue("@totalCost", totalCost);
+				});
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
+		}
+
+		/// <summary>
+		/// gets invoice number based on invoice date and total cost
+		/// </summary>
+		/// <param name="invoiceDate"></param>
+		/// <param name="totalCost"></param>
+		/// <returns></returns>
+		public DataSet GetInvoiceNum(string invoiceDate, int totalCost)
+		{
+			try
+			{
+				var sql = @"SELECT InvoiceNum FROM Invoices WHERE InvoiceDate = @invoiceDate AND TotalCost = @totalCost";
+
+				return ds = db.ExecuteSQLStatement(sql, ref returnValues, (OleDbCommand cmd) =>
+				{
+					cmd.Parameters.AddWithValue("@invoiceDate", invoiceDate);
+					cmd.Parameters.AddWithValue("@totalCost", totalCost);
+				});
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
 		}
 
 		/// <summary>
@@ -157,7 +215,15 @@ namespace GroupProject
 		/// <returns></returns>
 		public string UpdateInvoices(int invoiceNum, int cost)
 		{
-			return $"UPDATE Invoices SET TotalCost = {cost} WHERE InvoiceNum = {invoiceNum}";
+			try
+			{
+				return $"UPDATE Invoices SET TotalCost = {cost} WHERE InvoiceNum = {invoiceNum}";
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+													   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
 		}
 
 		/// <summary>
@@ -167,7 +233,15 @@ namespace GroupProject
 		/// <returns></returns>
 		public string DeleteLineItems(int invoiceNum)
 		{
-			return $"DELETE FROM LineItems WHERE InvoiceNum = {invoiceNum}";
+			try
+			{
+				return $"DELETE FROM LineItems WHERE InvoiceNum = {invoiceNum}";
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+													   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
 		}
 
 		/// <summary>
@@ -177,7 +251,15 @@ namespace GroupProject
 		/// <returns></returns>
 		public string DeleteInvoices(int invoiceNum)
 		{
-			return $"DELETE FROM Invoices WHERE InvoiceNum = {invoiceNum}";
+			try
+			{
+				return $"DELETE FROM Invoices WHERE InvoiceNum = {invoiceNum}";
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+													   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
 		}
 		#endregion
 	}

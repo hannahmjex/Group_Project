@@ -3,10 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroupProject
 {
@@ -44,6 +41,11 @@ namespace GroupProject
 			}
 		}
 
+		/// <summary>
+		/// This method gets the item info from the item descriptions
+		/// </summary>
+		/// <param name="itemDesc"></param>
+		/// <returns></returns>
 		public List<string> GetItemRow(string itemDesc)
 		{
 			try
@@ -59,9 +61,24 @@ namespace GroupProject
 			}
 			catch (Exception ex)
 			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
+		}
 
-				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-									MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+		public void SaveInvoice(string invoiceDate, int totalCost)
+		{
+			try
+			{
+				//save invoice
+				mainSQL.InsertInvoices(invoiceDate, totalCost);
+
+				//get invoice number
+				DataSet invoice = mainSQL.GetInvoiceNum(invoiceDate, totalCost);
+
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
 			}
 		}
 	}

@@ -43,5 +43,9 @@ namespace GroupProject.Main
         /// item cost
         /// </summary>
         public string ItemCost { get; set; }
+
+        public string Code { get { return ItemCode; } }
+        public string Description { get { return ItemDesc; } }
+        public string Cost { get { return ItemCost; } }
     }
 }

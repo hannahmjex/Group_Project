@@ -43,6 +43,10 @@ namespace GroupProject
 		/// </summary>
 		bool editing;
 
+		List<string> itemInfo;
+
+		int total;
+
 
 
 		/// <summary>
@@ -56,25 +60,24 @@ namespace GroupProject
 			wndSearch = new SearchWindow();
 			mainLogic = new clsMainLogic();
 			addedItems = new List<string>();
+			itemInfo = new List<string>();
 			items = new List<string>();
 			ds = new DataSet();
 			addedItems = new List<string>();
+			total = 0;
 			FillItemSelectionBox();
 		}
 
 		/// <summary>
-        /// Called when the form is loaded.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void WindowBinding_Loaded(object sender, RoutedEventArgs e)
-        {
-            //Create some data in the list
-           // items = new ObservableCollection<Item>();
-
-            //Bind the DataGrids to the ObservableCollections
+		/// Called when the form is loaded.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void WindowBinding_Loaded(object sender, RoutedEventArgs e)
+		{
+			//Bind the DataGrids to the ObservableCollections
 			dgInvoice.ItemsSource = items;
-        }
+		}
 
 		/// <summary>
 		/// this method fills the item selection combo box
@@ -98,6 +101,7 @@ namespace GroupProject
 			addItemButton.IsEnabled = true;
 			editButton.IsEnabled = true;
 			saveButton.IsEnabled = true;
+			total = 0;
 		}
 
 		/// <summary>
@@ -121,8 +125,13 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void removeItemButton_Click(object sender, RoutedEventArgs e)
 		{
-			dgInvoice.SelectedCells.Clear();
-			//call sql statement to remove item
+			//Make sure the current row is not null
+			if (dgInvoice.SelectedItems != null)
+			{
+				//remove selected item
+				dgInvoice.Items.Remove(dgInvoice.SelectedItems[0]);
+				UpdateTotalCost(false);
+			}
 		}
 
 		/// <summary>
@@ -138,10 +147,17 @@ namespace GroupProject
 			//if invoice is being edited/added
 			//DO NOTHING
 
+			if (editing)
+			{
+				MessageBox.Show("Please finish editing before moving on");
+			}
 			//else
-			this.Hide();
-			wndItems.ShowDialog();
-			this.Show();
+			else
+			{
+				this.Hide();
+				wndItems.ShowDialog();
+				this.Show();
+			}
 		}
 
 		/// <summary>
@@ -165,48 +181,47 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void addButton_Click(object sender, RoutedEventArgs e)
 		{
-			//make temporary table
-			DataTable table;
-			if (dgInvoice.Items.Count == 0)
-			{
-				table = ds.Tables.Add("Items");
-				table.Columns.Add("Code");
-				table.Columns.Add("Description");
-				table.Columns.Add("Cost");
-			}
-
-			table = ds.Tables[0];
-
 			//get item info
 			var selectedItem = (Item)cboItemSelection.SelectedItem;
-			List<string> itemInfo = mainLogic.GetItemRow(selectedItem.ItemDesc);
-			//add the item info to the temporary table
-			table.Rows.Add(itemInfo[0], itemInfo[1], itemInfo[2]);
-			table.AcceptChanges();
-			dgInvoice.DataContext = table;
-			
-			dgInvoice.UpdateLayout();
+			itemInfo = mainLogic.GetItemRow(selectedItem.ItemDesc);
 
-			dgInvoice.ItemsSource = table.Rows;
-			//dgInvoice.ItemsSource = items;
-
+			//add items to data grid
+			dgInvoice.Items.Add(new Item(itemInfo[0], itemInfo[1], itemInfo[2]));
 
 			//add description to added items
 			addedItems.Add(itemInfo.ToString());
 
-	
-
-			//update cost textbox 
 			//Update total cost 
-			UpdateTotalCost();
+			UpdateTotalCost(true);
 		}
 
 		/// <summary>
 		/// This method updates the total cost when a new item is added to the invoice
 		/// </summary>
-		private void UpdateTotalCost()
+		private void UpdateTotalCost(bool added)
 		{
-			
+			//if jtem was added
+			if (added)
+			{
+				//add most recently added item
+				total += Int32.Parse(itemInfo[2]);
+			}
+			//if item was removed
+			else
+			{
+				total -= Int32.Parse(itemInfo[2]);
+
+			}
+			//make sure total doesn't go less than 0
+			if (total < 0)
+			{
+				totalTextbox.Text = 0.ToString();
+
+			}
+			else
+			{
+				totalTextbox.Text = total.ToString();
+			}
 		}
 
 		/// <summary>
@@ -223,6 +238,11 @@ namespace GroupProject
 			if (invoiceDateTextbox.Text == "DD/MM/YYYY" || invoiceDateTextbox.Text == "")
 			{
 				MessageBox.Show("Please enter a date.");
+			}
+			//if nothing added to invoice
+			else if (dgInvoice.Items.Count == 0)
+			{
+				MessageBox.Show("Please add an item");
 			}
 			else
 			{
@@ -265,6 +285,11 @@ namespace GroupProject
 			}
 		}
 
+		/// <summary>
+		/// This method enablese the remove item button after a row is selected in the datagrid
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void dgInvoice_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
 			removeItemButton.IsEnabled = true;

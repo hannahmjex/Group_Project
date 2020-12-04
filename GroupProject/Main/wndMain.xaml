@@ -14,11 +14,11 @@
 			</MenuItem>
 		</Menu>
 		<Label Content="Invoice Number:" Margin="240,72,449,310.5" RenderTransformOrigin="0.51,0.611"/>
-		<DataGrid x:Name="dgInvoice" Margin="250,117,203,10.5" IsEnabled="False" SelectionChanged="dgInvoice_SelectionChanged" DataContext="items" CanUserAddRows="true">
+		<DataGrid x:Name="dgInvoice" Margin="250,117,203,10.5" SelectionChanged="dgInvoice_SelectionChanged" DataContext="items" CanUserAddRows="true">
 			<DataGrid.Columns>
-				<DataGridTextColumn Header="Code" IsReadOnly="True" Binding="{Binding Path=Test1}" Width="110"></DataGridTextColumn>
-				<DataGridTextColumn Header="Description" IsReadOnly="True"  Binding="{Binding Path=Test2}" Width="110"></DataGridTextColumn>
-				<DataGridTextColumn Header="Cost" IsReadOnly="True"  Binding="{Binding Path=Test2}" Width="120"></DataGridTextColumn>
+				<DataGridTextColumn Header="Code" IsReadOnly="false" Binding="{Binding Path=Code}" Width="70"></DataGridTextColumn>
+				<DataGridTextColumn Header="Description" IsReadOnly="false"  Binding="{Binding Path=Description}" Width="200"></DataGridTextColumn>
+				<DataGridTextColumn Header="Cost" IsReadOnly="false"  Binding="{Binding Path=Cost}" Width="70"></DataGridTextColumn>
 			</DataGrid.Columns>
 		</DataGrid>
 		<ComboBox x:Name="cboItemSelection" DisplayMemberPath="ItemDesc" Margin="250,18,357,368.5" IsEnabled="False" SelectionChanged="cboItemSelection_SelectionChanged"/>
@@ -32,7 +32,7 @@
 		<Label Content="TBD" Margin="351,72,399,310.5"/>
 		<Label Content="Invoice Date:" Margin="401,72,310,310.5"/>
 		<TextBox x:Name="invoiceDateTextbox" Text="DD/MM/YYYY" Margin="510,72,193,318.5"/>
-		<TextBox x:Name="totalTextbox" IsReadOnly="true" TextWrapping="Wrap" Text="" Margin="685,252,62,144.5"/>
+		<TextBox x:Name="totalTextbox" IsReadOnly="true" TextWrapping="Wrap" Text="0" Margin="685,256,72,142.5"/>
 		<Label Content="Total: $" Margin="620,252,110,135.5"/>
 		<Label Content="Cost: $" Margin="488,18,253,369.5"/>
 	</Grid>
