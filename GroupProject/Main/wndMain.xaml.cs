@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Reflection;
 using System.Windows;
 
 namespace GroupProject
@@ -26,6 +27,11 @@ namespace GroupProject
 		/// main window sql class
 		/// </summary>
 		clsMainLogic mainLogic;
+
+		/// <summary>
+		/// exception handling class
+		/// </summary>
+		clsExceptionHandling exceptionHandling;
 
 		/// <summary>
 		/// dataset ds
@@ -54,29 +60,27 @@ namespace GroupProject
 		/// </summary>
 		public MainWindow()
 		{
-			InitializeComponent();
-			Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
-			wndItems = new wndItems();
-			wndSearch = new SearchWindow();
-			mainLogic = new clsMainLogic();
-			addedItems = new List<string>();
-			itemInfo = new List<string>();
-			items = new List<string>();
-			ds = new DataSet();
-			addedItems = new List<string>();
-			total = 0;
-			FillItemSelectionBox();
-		}
-
-		/// <summary>
-		/// Called when the form is loaded.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void WindowBinding_Loaded(object sender, RoutedEventArgs e)
-		{
-			//Bind the DataGrids to the ObservableCollections
-			dgInvoice.ItemsSource = items;
+			try
+			{
+				InitializeComponent();
+				Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+				wndItems = new wndItems();
+				wndSearch = new SearchWindow();
+				mainLogic = new clsMainLogic();
+				exceptionHandling = new clsExceptionHandling();
+				addedItems = new List<string>();
+				itemInfo = new List<string>();
+				items = new List<string>();
+				ds = new DataSet();
+				addedItems = new List<string>();
+				total = 0;
+				FillItemSelectionBox();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+									   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
 		}
 
 		/// <summary>
@@ -84,8 +88,16 @@ namespace GroupProject
 		/// </summary>
 		private void FillItemSelectionBox()
 		{
-			var items = mainLogic.GetAllItems();
-			cboItemSelection.ItemsSource = items;
+			try
+			{
+				var items = mainLogic.GetAllItems();
+				cboItemSelection.ItemsSource = items;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+									   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
 		}
 
 		/// <summary>
@@ -96,12 +108,21 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void newButton_Click(object sender, RoutedEventArgs e)
 		{
-			//enable other features
-			cboItemSelection.IsEnabled = true;
-			addItemButton.IsEnabled = true;
-			editButton.IsEnabled = true;
-			saveButton.IsEnabled = true;
-			total = 0;
+			try
+			{
+				//enable other features
+				cboItemSelection.IsEnabled = true;
+				addItemButton.IsEnabled = true;
+				editButton.IsEnabled = true;
+				saveButton.IsEnabled = true;
+				invoiceDate.IsEnabled = true;
+				total = 0;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+									   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
 		}
 
 		/// <summary>
@@ -112,8 +133,16 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void editButton_Click(object sender, RoutedEventArgs e)
 		{
-			//make invoice not read only
-			dgInvoice.IsReadOnly = false;
+			try
+			{
+				//make invoice not read only
+				dgInvoice.IsReadOnly = false;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+									   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
 		}
 
 		/// <summary>
@@ -125,12 +154,20 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void removeItemButton_Click(object sender, RoutedEventArgs e)
 		{
-			//Make sure the current row is not null
-			if (dgInvoice.SelectedItems != null)
+			try
 			{
-				//remove selected item
-				dgInvoice.Items.Remove(dgInvoice.SelectedItems[0]);
-				UpdateTotalCost(false);
+				//Make sure the current row is not null
+				if (dgInvoice.SelectedItems != null)
+				{
+					//remove selected item
+					dgInvoice.Items.Remove(dgInvoice.SelectedItems[0]);
+					UpdateTotalCost(false);
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+									   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
 			}
 		}
 
@@ -144,19 +181,27 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void UpdateMenuItem_Click(object sender, RoutedEventArgs e)
 		{
-			//if invoice is being edited/added
-			//DO NOTHING
+			try
+			{
+				//if invoice is being edited/added
+				//DO NOTHING
 
-			if (editing)
-			{
-				MessageBox.Show("Please finish editing before moving on");
+				if (editing)
+				{
+					MessageBox.Show("Please finish editing before moving on");
+				}
+				//else
+				else
+				{
+					this.Hide();
+					wndItems.ShowDialog();
+					this.Show();
+				}
 			}
-			//else
-			else
+			catch (Exception ex)
 			{
-				this.Hide();
-				wndItems.ShowDialog();
-				this.Show();
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+									   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
 			}
 		}
 
@@ -168,9 +213,17 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void SearchMenuItem_Click(object sender, RoutedEventArgs e)
 		{
-			this.Hide();
-			wndSearch.ShowDialog();
-			this.Show();
+			try
+			{
+				this.Hide();
+				wndSearch.ShowDialog();
+				this.Show();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+									   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
 		}
 
 		/// <summary>
@@ -181,18 +234,26 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void addButton_Click(object sender, RoutedEventArgs e)
 		{
-			//get item info
-			var selectedItem = (Item)cboItemSelection.SelectedItem;
-			itemInfo = mainLogic.GetItemRow(selectedItem.ItemDesc);
+			try
+			{
+				//get item info
+				var selectedItem = (Item)cboItemSelection.SelectedItem;
+				itemInfo = mainLogic.GetItemRow(selectedItem.ItemDesc);
 
-			//add items to data grid
-			dgInvoice.Items.Add(new Item(itemInfo[0], itemInfo[1], itemInfo[2]));
+				//add items to data grid
+				dgInvoice.Items.Add(new Item(itemInfo[0], itemInfo[1], itemInfo[2]));
 
-			//add description to added items
-			addedItems.Add(itemInfo.ToString());
+				//add description to added items
+				addedItems.Add(itemInfo.ToString());
 
-			//Update total cost 
-			UpdateTotalCost(true);
+				//Update total cost 
+				UpdateTotalCost(true);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+									   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
 		}
 
 		/// <summary>
@@ -200,33 +261,41 @@ namespace GroupProject
 		/// </summary>
 		private void UpdateTotalCost(bool added)
 		{
-			//if jtem was added
-			if (added)
+			try
 			{
-				//add most recently added item
-				total += Int32.Parse(itemInfo[2]);
-			}
-			//if item was removed
-			else
-			{
-				total -= Int32.Parse(itemInfo[2]);
+				//if jtem was added
+				if (added)
+				{
+					//add most recently added item
+					total += Int32.Parse(itemInfo[2]);
+				}
+				//if item was removed
+				else
+				{
+					total -= Int32.Parse(itemInfo[2]);
 
-			}
-			//make sure total doesn't go less than 0
-			if (total < 0)
-			{
-				totalTextbox.Text = 0.ToString();
+				}
+				//make sure total doesn't go less than 0
+				if (total < 0)
+				{
+					totalTextbox.Text = 0.ToString();
 
+				}
+				else
+				{
+					totalTextbox.Text = total.ToString();
+				}
 			}
-			else
+			catch (Exception ex)
 			{
-				totalTextbox.Text = total.ToString();
+				exceptionHandling.HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+							MethodInfo.GetCurrentMethod().Name, ex.Message);
 			}
 		}
 
 		/// <summary>
 		/// This method is called when the save invoice button is clicked
-		/// After a date is entered for the invoice in the datagrid, it is saved
+		/// After a date is entered for the invoice, it is saved
 		/// Invoice number label gets filled in
 		/// Invoice goes into read only mode 
 		/// </summary>
@@ -234,23 +303,30 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void saveButton_Click(object sender, RoutedEventArgs e)
 		{
-			//if no date entered
-			if (invoiceDateTextbox.Text == "DD/MM/YYYY" || invoiceDateTextbox.Text == "")
+			try
 			{
-				MessageBox.Show("Please enter a date.");
+				//if no date entered
+				if (invoiceDate.Text == "")
+				{
+					MessageBox.Show("Please select a date.");
+				}
+				//if nothing added to invoice
+				else if (dgInvoice.Items.Count == 0)
+				{
+					MessageBox.Show("Please add an item");
+				}
+				else
+				{
+					//save invoice
+					mainLogic.SaveInvoice(invoiceDate.SelectedDate.ToString(), Int32.Parse(costTextbox.Text));
+					//change invoice to read only mode
+					dgInvoice.IsReadOnly = true;
+				}
 			}
-			//if nothing added to invoice
-			else if (dgInvoice.Items.Count == 0)
+			catch (Exception ex)
 			{
-				MessageBox.Show("Please add an item");
-			}
-			else
-			{
-				//fill in invoice label
-				//call sql to get invoice num
-
-				//change invoice to read only mode
-				dgInvoice.IsReadOnly = true;
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+									   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
 			}
 		}
 
@@ -262,8 +338,16 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void deleteButton_Click(object sender, RoutedEventArgs e)
 		{
-			dgInvoice.Items.Clear();
-			//call sql statement to delete invoice
+			try
+			{
+				dgInvoice.Items.Clear();
+				//call sql statement to delete invoice
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+									   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
 		}
 
 		/// <summary>
@@ -274,14 +358,22 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void cboItemSelection_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
-			var items = mainLogic.GetAllItems();
-
-			for (int i = 0; i < items.Count; i++)
+			try
 			{
-				if (cboItemSelection.SelectedIndex == i)
+				var items = mainLogic.GetAllItems();
+
+				for (int i = 0; i < items.Count; i++)
 				{
-					costTextbox.Text = items[i].ItemCost;
+					if (cboItemSelection.SelectedIndex == i)
+					{
+						costTextbox.Text = items[i].ItemCost;
+					}
 				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+									   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
 			}
 		}
 
@@ -292,7 +384,15 @@ namespace GroupProject
 		/// <param name="e"></param>
 		private void dgInvoice_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 		{
-			removeItemButton.IsEnabled = true;
+			try
+			{
+				removeItemButton.IsEnabled = true;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+									   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
 		}
 	}
 }
