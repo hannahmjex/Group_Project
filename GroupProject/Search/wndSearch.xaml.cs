@@ -176,6 +176,9 @@ namespace GroupProject
         {
             try
             {
+                //clear out main window datagrid
+                MainWindow.dgInvoice.Items.Clear();
+
                 var invoice = (Invoice)dataGridInvoices.SelectedItem;
 
                 MainWindow.ShowSelectedInvoiceItems(invoice.InvoiceNum);
