@@ -264,6 +264,10 @@ namespace GroupProject
 			}
 		}
 
+		/// <summary>
+		/// Shows items from selected invoice from wndSearch
+		/// </summary>
+		/// <param name="invoiceNum"></param>
         public void ShowSelectedInvoiceItems(int invoiceNum)
         {
             var items = mainLogic.GetItemsForInvoice(invoiceNum.ToString());

@@ -22,7 +22,7 @@
 			</DataGrid.Columns>
 		</DataGrid>
 		<DatePicker x:Name="invoiceDate" IsEnabled="false" Margin="52,266,616,118.5" RenderTransformOrigin="0.509,0.649"/>
-		<ComboBox x:Name="cboItemSelection" DisplayMemberPath="Description" Margin="330,33,277,353.5" IsEnabled="False" SelectionChanged="cboItemSelection_SelectionChanged"/>
+		<ComboBox x:Name="cboItemSelection" Margin="330,33,277,353.5" IsEnabled="False" SelectionChanged="cboItemSelection_SelectionChanged"/>
 		<Button x:Name="addItemButton" IsEnabled="False" Content="Add Item" HorizontalAlignment="Left" Margin="641,88,0,0" VerticalAlignment="Top" Width="120" Click="addButton_Click" Height="28"/>
 		<Button x:Name="newButton" Content="New Invoice" HorizontalAlignment="Left" Margin="52,38,0,0" VerticalAlignment="Top" Width="120" Click="newButton_Click" Height="26" RenderTransformOrigin="-0.377,0.327"/>
 		<Button x:Name="editButton" IsEnabled="False" Content="Edit Invoice" HorizontalAlignment="Left" Margin="52,78,0,0" VerticalAlignment="Top" Width="120" Click="editButton_Click" Height="26"/>
