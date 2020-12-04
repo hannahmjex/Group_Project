@@ -43,6 +43,11 @@ namespace GroupProject
 		bool editing;
 
 		/// <summary>
+		/// bools to tell if the invoice has been saved
+		/// </summary>
+		bool saved;
+
+		/// <summary>
 		/// list of item information
 		/// </summary>
 		List<string> itemInfo;
@@ -79,23 +84,6 @@ namespace GroupProject
 		}
 
 		/// <summary>
-		/// this method fills the item selection combo box
-		/// </summary>
-		private void FillItemSelectionBox()
-		{
-			try
-			{
-				var items = mainLogic.GetAllItems();
-                cboItemSelection.ItemsSource = items.Select(x => x.Description).Distinct();
-            }
-			catch (Exception ex)
-			{
-				exceptionHandling.HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
-							MethodInfo.GetCurrentMethod().Name, ex.Message);
-			}
-		}
-
-		/// <summary>
 		/// This method is called when the new invoice button is clicked
 		/// it enables the rest of the screen
 		/// </summary>
@@ -104,31 +92,35 @@ namespace GroupProject
 		private void newButton_Click(object sender, RoutedEventArgs e)
 		{
 			try
-            {
-                //if there are items in the datagrid
-                if (dgInvoice.Items.Count != 0)
-                {
-                    dgInvoice.Items.Clear();
-                }
-                //enable other features
-                SetIsEnabled(true);
+			{
+				//if there are items in the datagrid
+				if (dgInvoice.Items.Count != 0)
+				{
+					dgInvoice.Items.Clear();
+				}
+				//enable other features
+				SetIsEnabled(true);
 
-                total = 0;
-            }
-            catch (Exception ex)
+				//set total text box to 0
+				total = 0;
+
+				//set saved to false
+				saved = false;
+			}
+			catch (Exception ex)
 			{
 				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
 									   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
 			}
 		}
 
-        /// <summary>
-        /// This method is called when the edit invoice button is clicked
-        /// it allows the user to edit the current invoice
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void editButton_Click(object sender, RoutedEventArgs e)
+		/// <summary>
+		/// This method is called when the edit invoice button is clicked
+		/// it allows the user to edit the current invoice
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void editButton_Click(object sender, RoutedEventArgs e)
 		{
 			try
 			{
@@ -189,6 +181,10 @@ namespace GroupProject
 				{
 					MessageBox.Show("Please finish editing before moving on");
 				}
+				else if (!saved)
+				{
+					MessageBox.Show("Please save the invoice before moving on");
+				}
 				//else
 				else
 				{
@@ -216,14 +212,14 @@ namespace GroupProject
 			{
 				this.Hide();
 
-                if (wndSearch != null)
-                {
-                    wndSearch = null;
-                }
+				if (wndSearch != null)
+				{
+					wndSearch = null;
+				}
 
-                wndSearch = new SearchWindow(this);
+				wndSearch = new SearchWindow(this);
 
-                wndSearch.ShowDialog();
+				wndSearch.ShowDialog();
 
 				this.Show();
 			}
@@ -268,51 +264,16 @@ namespace GroupProject
 		/// Shows items from selected invoice from wndSearch
 		/// </summary>
 		/// <param name="invoiceNum"></param>
-        public void ShowSelectedInvoiceItems(int invoiceNum)
-        {
-            var items = mainLogic.GetItemsForInvoice(invoiceNum.ToString());
-
-            SetIsEnabled(true);
-            editButton.IsEnabled = true;
-            deleteButton.IsEnabled = true;
-            dgInvoice.IsEnabled = false;
-
-            dgInvoice.ItemsSource = items;
-        }
-
-        /// <summary>
-        /// This method updates the total cost when a new item is added to the invoice
-        /// </summary>
-        private void UpdateTotalCost(bool added)
+		public void ShowSelectedInvoiceItems(int invoiceNum)
 		{
-			try
-			{
-				//if jtem was added
-				if (added)
-				{
-					//add most recently added item
-					total += Int32.Parse(itemInfo[2]);
-				}
-				//if item was removed
-				else
-				{
-					total -= Int32.Parse(itemInfo[2]);
-				}
-				//make sure total doesn't go less than 0
-				if (total < 0)
-				{
-					totalTextbox.Text = 0.ToString();
-				}
-				else
-				{
-					totalTextbox.Text = total.ToString();
-				}
-			}
-			catch (Exception ex)
-			{
-				exceptionHandling.HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
-							MethodInfo.GetCurrentMethod().Name, ex.Message);
-			}
+			var items = mainLogic.GetItemsForInvoice(invoiceNum.ToString());
+
+			SetIsEnabled(true);
+			editButton.IsEnabled = true;
+			deleteButton.IsEnabled = true;
+			dgInvoice.IsEnabled = false;
+
+			dgInvoice.ItemsSource = items;
 		}
 
 		/// <summary>
@@ -362,6 +323,8 @@ namespace GroupProject
 					//end editing
 					editing = false;
 				}
+				//set saved to true
+				saved = true;
 			}
 			catch (Exception ex)
 			{
@@ -450,16 +413,68 @@ namespace GroupProject
 			}
 		}
 
-        /// <summary>
-        /// Set IsEnabled property for contol elements
-        /// </summary>
-        /// <param name="isEnabled"></param>
-        private void SetIsEnabled(bool isEnabled)
-        {
-            cboItemSelection.IsEnabled = isEnabled;
-            addItemButton.IsEnabled = isEnabled;
-            saveButton.IsEnabled = isEnabled;
-            invoiceDate.IsEnabled = isEnabled;
-        }
-    }
+		/// <summary>
+		/// this method fills the item selection combo box
+		/// </summary>
+		private void FillItemSelectionBox()
+		{
+			try
+			{
+				var items = mainLogic.GetAllItems();
+				cboItemSelection.ItemsSource = items.Select(x => x.Description).Distinct();
+			}
+			catch (Exception ex)
+			{
+				exceptionHandling.HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+							MethodInfo.GetCurrentMethod().Name, ex.Message);
+			}
+		}
+
+		/// <summary>
+		/// This method updates the total cost when a new item is added to the invoice
+		/// </summary>
+		private void UpdateTotalCost(bool added)
+		{
+			try
+			{
+				//if jtem was added
+				if (added)
+				{
+					//add most recently added item
+					total += Int32.Parse(itemInfo[2]);
+				}
+				//if item was removed
+				else
+				{
+					total -= Int32.Parse(itemInfo[2]);
+				}
+				//make sure total doesn't go less than 0
+				if (total < 0)
+				{
+					totalTextbox.Text = 0.ToString();
+				}
+				else
+				{
+					totalTextbox.Text = total.ToString();
+				}
+			}
+			catch (Exception ex)
+			{
+				exceptionHandling.HandleError(MethodInfo.GetCurrentMethod().DeclaringType.Name,
+							MethodInfo.GetCurrentMethod().Name, ex.Message);
+			}
+		}
+
+		/// <summary>
+		/// Set IsEnabled property for contol elements
+		/// </summary>
+		/// <param name="isEnabled"></param>
+		private void SetIsEnabled(bool isEnabled)
+		{
+			cboItemSelection.IsEnabled = isEnabled;
+			addItemButton.IsEnabled = isEnabled;
+			saveButton.IsEnabled = isEnabled;
+			invoiceDate.IsEnabled = isEnabled;
+		}
+	}
 }
