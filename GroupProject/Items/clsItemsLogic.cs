@@ -81,9 +81,18 @@ namespace GroupProject.Items
         {
             try
             {
+                //get ds with parameter code
                 var code = SQL.CheckUniqueCode(Code);
 
-                return !(code == Code);
+                //if there is nothing in the ds, then the code can be used
+                if (code.Tables[0].Rows == null)
+				{
+                    return true;
+				}
+				else
+				{
+                    return false;
+				}
             }
             catch (Exception ex)
             {

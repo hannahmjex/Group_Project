@@ -27,17 +27,12 @@ namespace GroupProject.Items
         /// <summary>
         /// DataSet Object Declaration
         /// </summary>
-        private DataSet ds;
+        DataSet ds;
 
         /// <summary>
         /// class item
         /// </summary>
         Item Item;
-
-        /// <summary>
-        /// OleDbCommand Object Declaration
-        /// </summary>
-        private OleDbCommand Cmd;
 
         /// <summary>
         /// Default Constructor
@@ -103,21 +98,24 @@ namespace GroupProject.Items
         /// </summary>
         /// <param name="Code">Item's Code</param>
         /// <returns>boolean representing uniqueness of the code</returns>
-        public string CheckUniqueCode(string Code)
+        public DataSet CheckUniqueCode(string Code)
         {
             try
             {
                 
-               // string sql = "SELECT ItemCode FROM ItemDesc WHERE ItemCode = @Code";
-                string sql = "SELECT ItemCode FROM ItemDesc WHERE ItemCode = " + Code;
+               string sql = "SELECT ItemCode FROM ItemDesc WHERE ItemCode = @Code";
+                //string sql = "SELECT ItemCode FROM ItemDesc WHERE ItemCode = " + Code;
 
                 //Cmd = new OleDbCommand("SELECT ItemCode FROM ItemDesc WHERE ItemCode = @Code");
                 //Cmd.Parameters.Add("@Code", OleDbType.WChar).Value = Code;
 
                 //return db.ExecuteScalarSQL(Cmd) == "";
                 //string code = db.ExecuteScalarSQL(sql, (OleDbCommand cmd) => { cmd.Parameters.AddWithValue("@Code", Code); });
-                string code = db.ExecuteScalarSQL(sql);
-                return code; 
+                return db.ExecuteSQLStatement(sql, ref returnValues, (OleDbCommand cmd) =>
+                {
+                    cmd.Parameters.AddWithValue("@Code", Code);
+                });
+                 
                 //Do logic for boolean in itemLogic
 			}
             catch (Exception ex)
