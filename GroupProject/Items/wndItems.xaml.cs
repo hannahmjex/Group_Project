@@ -79,9 +79,9 @@ namespace GroupProject
                 //prefill text boxes with the selected item's properties
                 var selectedItem = (Item)ItemDataGrid.SelectedItem;
 
-                ItemCodeBox.Text = selectedItem.Code.ToString();
-                ItemDescBox.Text = selectedItem.Description;
-                ItemCostBox.Text = selectedItem.Cost.ToString();
+                ItemCodeBox.Text = selectedItem.ItemCode/*Code*/.ToString();
+                ItemDescBox.Text = selectedItem.ItemDesc/*Description*/;
+                ItemCostBox.Text = selectedItem.ItemCost/*Cost*/.ToString();
 
                 //Enable 2/3 textboxes excluding the item code, disable the datagrid, show the SaveItem button
                 ItemCodeBox.IsEnabled = false;
@@ -178,7 +178,7 @@ namespace GroupProject
 
                 //Check to see if the SelectedIndex is -1 indicating whether they are saving a new Item or just updating an Item
                 //Also check to see if either the cost or description was changed
-                if (ItemDataGrid.SelectedIndex != -1 && (((Item)ItemDataGrid.SelectedItem).Description != ItemDescBox.Text || ((Item)ItemDataGrid.SelectedItem).Cost != Convert.ToInt32(ItemCostBox.Text)))
+                if (ItemDataGrid.SelectedIndex != -1 && (((Item)ItemDataGrid.SelectedItem).ItemDesc/*Description*/ != ItemDescBox.Text || ((Item)ItemDataGrid.SelectedItem).ItemCost/*Cost*/ != Convert.ToInt32(ItemCostBox.Text)))
                 {
                     //Update the item
                     IL.UpdateItem(ItemDataGrid.SelectedItem, ItemDescBox.Text, ItemCostBox.Text);

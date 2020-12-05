@@ -44,8 +44,8 @@ namespace GroupProject
         /// </summary>
         public int ItemCost { get; set; }
 
-        public char Code { get { return ItemCode; } }
-        public string Description { get { return ItemDesc; } }
-        public int Cost { get { return ItemCost; } }
+        //public char Code { get { return ItemCode; } }
+        //public string Description { get { return ItemDesc; } }
+        //public int Cost { get { return ItemCost; } }
     }
 }

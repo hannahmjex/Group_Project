@@ -124,7 +124,7 @@ namespace GroupProject.Items
         {
             try
             {
-                SQL.DeleteItem(((Item)SelectedItem).Code.ToString());
+                SQL.DeleteItem(((Item)SelectedItem).ItemCode/*Code*/.ToString());
                 _Items.Remove((Item)SelectedItem);
             }
             catch (Exception ex)
@@ -149,7 +149,7 @@ namespace GroupProject.Items
                 //If the Description or Cost is not changed pass in null
                 //SQL.UpdateItem(((Item)SelectedItem).Code, ((Item)SelectedItem).Description != Desc ? Desc : null, ((Item)SelectedItem).Cost.ToString() != Cost ? Cost : null);
 
-                SQL.UpdateItem(item.Code, Desc, Cost);
+                SQL.UpdateItem(item.ItemCode/*Code*/, Desc, Cost);
             }
             catch (Exception ex)
             {

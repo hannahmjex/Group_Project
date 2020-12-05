@@ -226,7 +226,7 @@ namespace GroupProject.Items
                 //Cmd = new OleDbCommand("SELECT DISTINCT InvoiceNum FROM LineItems WHERE ItemCode = @ItemCode");
                 //Cmd.Parameters.Add("@ItemCode", OleDbType.WChar).Value = SelectedItem.Code;
 
-                var sql = "SELECT DISTINCT InvoiceNum FROM LineItems WHERE ItemCode = "+ SelectedItem.Code;
+                var sql = "SELECT DISTINCT InvoiceNum FROM LineItems WHERE ItemCode = "+ SelectedItem.ItemCode/*Code*/;
 
                 int retVal = 0;
 
