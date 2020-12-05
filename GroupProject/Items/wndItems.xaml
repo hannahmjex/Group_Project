@@ -1,4 +1,4 @@
-﻿<Window x:Class="GroupProject.wndItems"
+﻿<Window x:Class="GroupProject.EditItemsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,13 +7,20 @@
         mc:Ignorable="d"
         Title="Edit Items Window" Height="450" Width="800">
     <Grid>
-        <TextBox x:Name="descriptionTextBox" HorizontalAlignment="Left" Height="23" Margin="52,71,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="priceTextBox" HorizontalAlignment="Left" Height="23" Margin="52,150,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="120"/>
-        <Label x:Name="descriptionLabel" Content="Description" HorizontalAlignment="Left" Margin="52,33,0,0" VerticalAlignment="Top" Height="38" Width="91" FontSize="14" RenderTransformOrigin="0.472,-0.194"/>
-        <Label x:Name="priceLabel" Content="Price" HorizontalAlignment="Left" Margin="52,122,0,0" VerticalAlignment="Top" Height="28" Width="50" FontSize="14"/>
-        <Button x:Name="addButton" Content="Add" HorizontalAlignment="Left" Margin="52,218,0,0" VerticalAlignment="Top" Width="120" Click="addButton_Click" Height="27" RenderTransformOrigin="-0.377,0.327"/>
-        <Button x:Name="updateButton" Content="Update" HorizontalAlignment="Left" Margin="52,270,0,0" VerticalAlignment="Top" Width="120" Click="updateButton_Click" Height="27"/>
-        <Button x:Name="deleteButton" Content="Delete" HorizontalAlignment="Left" Margin="52,323,0,0" VerticalAlignment="Top" Width="120" Click="deleteButton_Click" Height="27"/>
-        <DataGrid x:Name="itemsDataGrid" HorizontalAlignment="Left" Height="333" Margin="214,28,0,0" VerticalAlignment="Top" Width="536" IsReadOnly="True" VerticalScrollBarVisibility="Auto" />
+        <TextBox x:Name="ItemDescBox" HorizontalAlignment="Left" Height="23" Margin="52,117,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="ItemCostBox" HorizontalAlignment="Left" Height="23" Margin="52,172,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="DescriptionLabel" Content="Description" HorizontalAlignment="Left" Margin="52,86,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="PriceLabel" Content="Price" HorizontalAlignment="Left" Margin="52,143,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.488,1.093"/>
+        <Button x:Name="AddItemBtn" Content="Add" HorizontalAlignment="Left" Margin="71,226,0,0" VerticalAlignment="Top" Width="75" Click="AddItemBtn_Click"/>
+        <Button x:Name="EditItemBtn" Content="Update" HorizontalAlignment="Left" Margin="71,269,0,0" VerticalAlignment="Top" Width="75" Click="EditItemBtn_Click"/>
+        <Button x:Name="DeleteItemBtn" Content="Delete" HorizontalAlignment="Left" Margin="71,308,0,0" VerticalAlignment="Top" Width="75" Click="DeleteItemBtn_Click"/>
+        <Label x:Name="DescriptionErrorLabel" Content="Please enter the item's description" HorizontalAlignment="Left" Margin="11,91,0,0" Foreground="Red" FontWeight="Bold" VerticalAlignment="Top" Visibility="Hidden"/>
+        <Label x:Name="PriceErrorLabel" Content="Please enter the item's price" HorizontalAlignment="Left" Margin="30,169,0,0" Foreground="Red" FontWeight="Bold" VerticalAlignment="Top" Visibility="Hidden"/>
+        <DataGrid x:Name="ItemDataGrid" ColumnWidth="*" HorizontalAlignment="Left" Height="333" Margin="214,28,0,0" VerticalAlignment="Top" Width="536" SelectionChanged="ItemDataGrid_SelectionChanged" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" VerticalScrollBarVisibility="Auto"/>
+        <Label x:Name="RowSelectionErrorLabel" Content="Select a data row to update or delete" HorizontalAlignment="Left" Margin="388,366,0,0" Foreground="Red" FontWeight="Bold" Visibility="Hidden" VerticalAlignment="Top"/>
+        <TextBlock x:Name="DeleteItemErrorTextBlock" HorizontalAlignment="Left" Margin="30,358,0,0" TextWrapping="Wrap" Text="Cannot delete this item, it's included in an existing invoice" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold" Height="39" Width="184" Visibility="Hidden"/>
+        <TextBox x:Name="ItemCodeBox" HorizontalAlignment="Left" Height="23" Margin="52,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="-0.343,-0.502"/>
+        <Label x:Name="CodeLabel" Content="Item Code" HorizontalAlignment="Left" Margin="52,28,0,0" VerticalAlignment="Top" Width="70"/>
+        <Button x:Name="SaveItemBtn" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="71,351,0,0" Click="SaveItemBtn_Click"/>
     </Grid>
 </Window>
