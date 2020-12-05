@@ -189,10 +189,19 @@ namespace GroupProject
 				//else
 				else
 				{
-					this.Hide();
-					wndItems.ShowDialog();
-					this.Show();
-				}
+                    this.Hide();
+
+                    if (wndItems != null)
+                    {
+                        wndItems = null;
+                    }
+
+                    wndItems = new EditItemsWindow();
+
+                    wndItems.ShowDialog();
+
+                    this.Show();
+                }
 			}
 			catch (Exception ex)
 			{
