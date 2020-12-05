@@ -318,6 +318,9 @@ namespace GroupProject
 						//set invoice number
 						invoiceNum.Content = mainLogic.GetInvoiceNumber();
 
+						//add to items to line items
+						mainLogic.InsertLineItems(addedItems);
+
 						//change invoice to read only mode
 						dgInvoice.IsEnabled = false;
 						//enable delete and edit buttons

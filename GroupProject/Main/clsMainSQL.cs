@@ -158,25 +158,46 @@ namespace GroupProject
 
 		/// <summary>
 		/// Query to add an Item to LineItems.
-		///// MIGHT NOT NEED THIS
-		///// </summary>
-		///// <param name="invoiceNum"></param>
-		///// <param name="lineItemNum"></param>
-		///// <param name="itemCode"></param>
-		///// <returns></returns>
-		//public string InsertLineItems(int invoiceNum, int lineItemNum, string itemCode)
-		//{
-		//	try
-		//	{
-		//		return $"INSERT INTO LineItems (InvoiceNum, LineitemNum, ItemCode) VALUES ({invoiceNum}, {lineItemNum}, '{itemCode}')";
-		//	}
-		//	catch (Exception ex)
-		//	{
-		//		throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
-		//											   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-		//	}
-		//}
+		/// </summary>
+		/// <param name="invoiceNum"></param>
+		/// <param name="lineItemNum"></param>
+		/// <param name="itemCode"></param>
+		/// <returns></returns>
+		public void InsertLineItems(string invoiceNum, string lineItemNum, string itemCode)
+		{
+			try
+			{
+				string sql = "INSERT INTO LineItems (InvoiceNum, LineitemNum, ItemCode) VALUES (" + invoiceNum + ", " + lineItemNum + ", " +itemCode +" )";
+				db.ExecuteNonQuery(sql);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+													   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
+		}
 
+		/// <summary>
+		/// gets item 
+		/// </summary>
+		/// <param name="itemCode"></param>
+		/// <returns></returns>
+		public DataSet GetItemCode(string itemDesc)
+		{
+			try
+			{
+				string sql = "SELECT ItemCode FROM ItemDesc WHERE ItemDesc = @itemDesc";
+				return db.ExecuteSQLStatement(sql, ref returnValues, (OleDbCommand cmd) =>
+				{
+					cmd.Parameters.AddWithValue("@itemCode", itemDesc);
+				});
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+													   MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
+		}
 		/// <summary>
 		/// Query to add an Item to Invoices.
 		/// </summary>

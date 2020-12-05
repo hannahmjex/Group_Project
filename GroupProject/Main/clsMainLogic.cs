@@ -72,11 +72,12 @@ namespace GroupProject
 		/// <param name="totalCost"></param>
 		/// <returns></returns>
 		public void SaveInvoice(string invoiceDate, string totalCost)
-		{ 
+		{
 			try
 			{
 				//save invoice
 				mainSQL.InsertInvoices(invoiceDate, totalCost);
+
 			}
 			catch (Exception ex)
 			{
@@ -101,6 +102,7 @@ namespace GroupProject
 				{
 					invoiceNumString.Add(invoiceNum.Tables[0].Rows[0][i].ToString());
 				}
+				//return invoice number 
 				return invoiceNumString[0];
 			}
 			catch (Exception ex)
@@ -145,21 +147,61 @@ namespace GroupProject
 			}
 		}
 
-        /// <summary>
+		/// <summary>
 		/// returns an ObservableCollection of all items
 		/// </summary>
 		/// <returns></returns>
 		public ObservableCollection<Item> GetItemsForInvoice(string invoiceNumber)
-        {
-            try
-            {
-                return mainSQL.SelectFromLineItems(invoiceNumber);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
-            }
-        }
-    }
+		{
+			try
+			{
+				return mainSQL.SelectFromLineItems(invoiceNumber);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
+		}
+
+		/// <summary>
+		/// returns an ObservableCollection of all items
+		/// </summary>
+		/// <returns></returns>
+		public void InsertLineItems(List<string> addedItems)
+		{
+			try
+			{
+
+				//get invoice number
+				string invoiceNum = GetInvoiceNumber();
+				//get lineItemNumber
+				ObservableCollection<Item> lineNumber = GetItemsForInvoice(invoiceNum);
+				
+
+				//somehow get the line item code
+				for (int i = 0; i < addedItems.Count; i++)
+				{
+					mainSQL.GetItemCode(addedItems[i]);
+					List<string> lineItemCode = new List<string>();
+
+					//extract invoice number and add to list bc idk how else to do this
+					for (int j = 0; j < lineNumber.Tables[0].Columns.Count; i++)
+					{
+						invoiceNumString.Add(invoiceNum.Tables[0].Rows[0][i].ToString());
+					}
+					//return invoice number 
+					//return invoiceNumString[0];
+
+					//insert in line number
+					mainSQL.InsertLineItems(invoiceNum, lineNumber, itemCode);
+
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+			}
+		}
+	}
 }
 
