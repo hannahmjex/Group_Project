@@ -171,7 +171,6 @@ namespace GroupProject
 		{
 			try
 			{
-
 				//get invoice number
 				string invoiceNum = GetInvoiceNumber();
 				//get lineItemNumber
@@ -181,20 +180,18 @@ namespace GroupProject
 				//somehow get the line item code
 				for (int i = 0; i < addedItems.Count; i++)
 				{
-					mainSQL.GetItemCode(addedItems[i]);
-					List<string> lineItemCode = new List<string>();
+					DataSet Codes = mainSQL.GetItemCode(addedItems[i]);
+					List<string> lineItem = new List<string>();
 
-					//extract invoice number and add to list bc idk how else to do this
-					for (int j = 0; j < lineNumber.Tables[0].Columns.Count; i++)
+					//extract item code
+					for (int j = 0; j < Codes.Tables[0].Columns.Count; i++)
 					{
-						invoiceNumString.Add(invoiceNum.Tables[0].Rows[0][i].ToString());
+						lineItem.Add(Codes.Tables[0].Rows[0][i].ToString());
 					}
-					//return invoice number 
-					//return invoiceNumString[0];
+					string itemCode = lineItem[1];
 
 					//insert in line number
-					mainSQL.InsertLineItems(invoiceNum, lineNumber, itemCode);
-
+					mainSQL.InsertLineItems(invoiceNum, lineNumber.ToString(), itemCode);
 				}
 			}
 			catch (Exception ex)
