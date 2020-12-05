@@ -75,7 +75,16 @@ namespace GroupProject
         {
             try
             {
+
+                //prefill text boxes with the selected item's properties
+                var selectedItem = (Item)ItemDataGrid.SelectedItem;
+
+                ItemCodeBox.Text = selectedItem.Code.ToString();
+                ItemDescBox.Text = selectedItem.Description;
+                ItemCostBox.Text = selectedItem.Cost.ToString();
+
                 //Enable 2/3 textboxes excluding the item code, disable the datagrid, show the SaveItem button
+                ItemCodeBox.IsEnabled = false;
                 ItemDescBox.IsEnabled = true;
                 ItemCostBox.IsEnabled = true;
                 ItemDataGrid.IsEnabled = false;

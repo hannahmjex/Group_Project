@@ -101,13 +101,13 @@ namespace GroupProject.Items
             try
             {
                 
-                string sql = "SELECT ItemCode FROM ItemDesc WHERE ItemCode =" + Code;
+                string sql = "SELECT ItemCode FROM ItemDesc WHERE ItemCode = @Code";
 
                 //Cmd = new OleDbCommand("SELECT ItemCode FROM ItemDesc WHERE ItemCode = @Code");
                 //Cmd.Parameters.Add("@Code", OleDbType.WChar).Value = Code;
 
                 //return db.ExecuteScalarSQL(Cmd) == "";
-                string code = db.ExecuteScalarSQL(sql);
+                string code = db.ExecuteScalarSQL(sql, (OleDbCommand cmd) => { cmd.Parameters.AddWithValue("@Code", Code); });
                 return code; 
                 //Do logic for boolean in itemLogic
 			}
@@ -128,7 +128,7 @@ namespace GroupProject.Items
         {
             try
             {
-                string sql = @"INSERT INTO ItemDesc(ItemCode, ItemDesc, Cost) VALUES ("+Code+", "+Desc+", "+Cost+")";
+                string sql = @"INSERT INTO ItemDesc(ItemCode, ItemDesc, Cost) VALUES ('"+Code+"', '"+Desc+"', '"+Cost+"')";
                 //Cmd = new OleDbCommand("INSERT INTO ItemDesc(ItemCode, ItemDesc, Cost) VALUES (@Code, @Desc, @Cost)");
                 //Cmd.Parameters.Add("@Code", OleDbType.WChar).Value = Code;
                 //Cmd.Parameters.Add("@Desc", OleDbType.WChar).Value = Desc;
@@ -177,7 +177,11 @@ namespace GroupProject.Items
         {
             try
             {
-                string sql = "UPDATE ItemDesc SET ItemDesc =" + Desc + " AND cost =" + Cost + "AND code =" + Code + "WHERE ItemCode =" + Code;
+                //string sql = @"UPDATE ItemDesc SET ItemDesc = '"+Desc+"' AND Cost = '"+Cost+"' AND ItemCode = '"+Code.ToString()+"' WHERE ItemCode = '"+Code.ToString()+"'";
+
+                var code = Code.ToString();
+
+                var sql = @"UPDATE ItemDesc SET ItemDesc = '" + Desc + "', Cost = '" + Cost + "' WHERE ItemCode = '" + Code + "'";
                 // Cmd = new OleDbCommand("UPDATE ItemDesc SET ");
 
                 ////If a new description is provided then add it to the SET clause
@@ -219,12 +223,16 @@ namespace GroupProject.Items
             try
             {
                 List<int> invoiceNums = new List<int>();
-                Cmd = new OleDbCommand("SELECT DISTINCT InvoiceNum FROM LineItems WHERE ItemCode = @ItemCode");
-                Cmd.Parameters.Add("@ItemCode", OleDbType.WChar).Value = SelectedItem.Code;
+                //Cmd = new OleDbCommand("SELECT DISTINCT InvoiceNum FROM LineItems WHERE ItemCode = @ItemCode");
+                //Cmd.Parameters.Add("@ItemCode", OleDbType.WChar).Value = SelectedItem.Code;
+
+                var sql = "SELECT DISTINCT InvoiceNum FROM LineItems WHERE ItemCode = "+ SelectedItem.Code;
 
                 int retVal = 0;
 
-                ds = db.ExecuteSQLStatement(Cmd, ref retVal);
+                //ds = db.ExecuteSQLStatement(Cmd, ref retVal);
+
+                ds = db.ExecuteSQLStatement(sql, ref retVal);
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {

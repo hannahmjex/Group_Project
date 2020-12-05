@@ -81,7 +81,7 @@ namespace GroupProject
 		/// </summary>
 		/// <param name="sSQL">The SQL statement to be executed.</param>
 		/// <returns>Returns a string from the scalar SQL statement.</returns>
-		public string ExecuteScalarSQL(string sSQL)
+		public string ExecuteScalarSQL(string sSQL, Action<OleDbCommand> callback = null)
 		{
 			try
 			{
@@ -96,8 +96,14 @@ namespace GroupProject
 						//Open the connection to the database
 						conn.Open();
 
-						//Add the information for the SelectCommand using the SQL statement and the connection object
-						adapter.SelectCommand = new OleDbCommand(sSQL, conn);
+                        //Create an OleDbCommand object using the sql statement and the connection
+                        var cmd = new OleDbCommand(sSQL, conn);
+
+                        //Invoke callback in cmd object if callback is not null
+                        callback?.Invoke(cmd);
+
+                        //Add the information for the SelectCommand using the SQL statement and the connection object
+                        adapter.SelectCommand = cmd;/*new OleDbCommand(sSQL, conn);*/
 						adapter.SelectCommand.CommandTimeout = 0;
 
 						//Execute the scalar SQL statement

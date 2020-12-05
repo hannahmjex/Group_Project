@@ -80,7 +80,9 @@ namespace GroupProject.Items
         {
             try
             {
-                return SQL.CheckUniqueCode(Code);
+                var code = SQL.CheckUniqueCode(Code);
+
+                return !(code == Code);
             }
             catch (Exception ex)
             {
@@ -142,8 +144,12 @@ namespace GroupProject.Items
         {
             try
             {
+                var item = (Item)SelectedItem;
+
                 //If the Description or Cost is not changed pass in null
-                SQL.UpdateItem(((Item)SelectedItem).Code, ((Item)SelectedItem).Description != Desc ? Desc : null, ((Item)SelectedItem).Cost.ToString() != Cost ? Cost : null);
+                //SQL.UpdateItem(((Item)SelectedItem).Code, ((Item)SelectedItem).Description != Desc ? Desc : null, ((Item)SelectedItem).Cost.ToString() != Cost ? Cost : null);
+
+                SQL.UpdateItem(item.Code, Desc, Cost);
             }
             catch (Exception ex)
             {
