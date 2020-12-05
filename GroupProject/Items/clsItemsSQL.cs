@@ -153,7 +153,7 @@ namespace GroupProject.Items
         {
             try
             {
-                string sql = "DELETE FROM ItemDesc WHERE ItemCode = " +Code;
+                string sql = "DELETE FROM ItemDesc WHERE ItemCode = '"+Code+"'";
 
                // Cmd = new OleDbCommand("DELETE FROM ItemDesc WHERE ItemCode = @Code");
                 //Cmd.Parameters.Add("@Code", OleDbType.WChar).Value = Code;
@@ -226,7 +226,7 @@ namespace GroupProject.Items
                 //Cmd = new OleDbCommand("SELECT DISTINCT InvoiceNum FROM LineItems WHERE ItemCode = @ItemCode");
                 //Cmd.Parameters.Add("@ItemCode", OleDbType.WChar).Value = SelectedItem.Code;
 
-                var sql = "SELECT DISTINCT InvoiceNum FROM LineItems WHERE ItemCode = "+ SelectedItem.ItemCode/*Code*/;
+                var sql = "SELECT DISTINCT InvoiceNum FROM LineItems WHERE ItemCode = '"+ SelectedItem.ItemCode+"'";
 
                 int retVal = 0;
 
