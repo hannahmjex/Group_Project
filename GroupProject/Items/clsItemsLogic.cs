@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GroupProject.Main;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -23,7 +24,7 @@ namespace GroupProject.Items
         /// <summary>
         /// Private Items Observable Collection Declaration
         /// </summary>
-        private ObservableCollection<Item> _Items;
+        ObservableCollection<Item> _Items;
 
         /// <summary>
         /// Public getter/setter for the _Items collection
@@ -103,7 +104,7 @@ namespace GroupProject.Items
             try
             {
                 SQL.InsertNewItem(Code, Desc, Cost);
-                Item newItem = new Item(Convert.ToChar(Code), Desc, Convert.ToInt32(Cost));
+                Item newItem = new Item(Code, Desc, Cost);
                 
                 _Items.Add(newItem);
 
@@ -124,7 +125,7 @@ namespace GroupProject.Items
         {
             try
             {
-                SQL.DeleteItem(((Item)SelectedItem).ItemCode/*Code*/.ToString());
+                SQL.DeleteItem(((Item)SelectedItem).Code/*Code*/.ToString());
                 _Items.Remove((Item)SelectedItem);
             }
             catch (Exception ex)
@@ -149,7 +150,8 @@ namespace GroupProject.Items
                 //If the Description or Cost is not changed pass in null
                 //SQL.UpdateItem(((Item)SelectedItem).Code, ((Item)SelectedItem).Description != Desc ? Desc : null, ((Item)SelectedItem).Cost.ToString() != Cost ? Cost : null);
 
-                SQL.UpdateItem(item.ItemCode/*Code*/, Desc, Cost);
+                // this might be wrong
+                SQL.UpdateItem(SelectedItem.ToString(), Desc, Cost);
             }
             catch (Exception ex)
             {

@@ -15,7 +15,7 @@ namespace GroupProject
 		/// <summary>
 		/// wndItems class
 		/// </summary>
-		wndItems wndItems;
+		EditItemsWindow wndItems;
 
 		/// <summary>
 		/// wndSearch class
@@ -66,13 +66,14 @@ namespace GroupProject
 			{
 				InitializeComponent();
 				Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
-				wndItems = new wndItems();
+				wndItems = new EditItemsWindow();
 				wndSearch = new SearchWindow(this);
 				mainLogic = new clsMainLogic();
 				exceptionHandling = new clsExceptionHandling();
 				addedItems = new List<string>();
 				itemInfo = new List<string>();
 				addedItems = new List<string>();
+				saved = true;
 				total = 0;
 				FillItemSelectionBox();
 			}
@@ -384,7 +385,7 @@ namespace GroupProject
 				{
 					if (cboItemSelection.SelectedIndex == i)
 					{
-						costTextbox.Text = items[i].ItemCost;
+						costTextbox.Text = items[i].Cost;
 					}
 				}
 			}

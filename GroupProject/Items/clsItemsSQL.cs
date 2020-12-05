@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GroupProject.Main;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -29,6 +30,11 @@ namespace GroupProject.Items
         private DataSet ds;
 
         /// <summary>
+        /// class item
+        /// </summary>
+        Item Item;
+
+        /// <summary>
         /// OleDbCommand Object Declaration
         /// </summary>
         private OleDbCommand Cmd;
@@ -42,6 +48,7 @@ namespace GroupProject.Items
             {
                 db = new clsDataAccess();
                 ds = new DataSet();
+                Item = new Item();
             }
             catch (Exception ex)
             {
@@ -71,7 +78,7 @@ namespace GroupProject.Items
                     string itemCost = ds.Tables[0].Rows[i][2].ToString();
 
                     // Create new local item object
-                    Item item = new Item(Convert.ToChar(itemCode), itemDescription, Convert.ToInt32(itemCost));
+                    Item item = new Item(itemCode, itemDescription, itemCost);
 
                     // Add newly created item object to local collection of items.
                     items.Add(item);
@@ -101,13 +108,15 @@ namespace GroupProject.Items
             try
             {
                 
-                string sql = "SELECT ItemCode FROM ItemDesc WHERE ItemCode = @Code";
+               // string sql = "SELECT ItemCode FROM ItemDesc WHERE ItemCode = @Code";
+                string sql = "SELECT ItemCode FROM ItemDesc WHERE ItemCode = " + Code;
 
                 //Cmd = new OleDbCommand("SELECT ItemCode FROM ItemDesc WHERE ItemCode = @Code");
                 //Cmd.Parameters.Add("@Code", OleDbType.WChar).Value = Code;
 
                 //return db.ExecuteScalarSQL(Cmd) == "";
-                string code = db.ExecuteScalarSQL(sql, (OleDbCommand cmd) => { cmd.Parameters.AddWithValue("@Code", Code); });
+                //string code = db.ExecuteScalarSQL(sql, (OleDbCommand cmd) => { cmd.Parameters.AddWithValue("@Code", Code); });
+                string code = db.ExecuteScalarSQL(sql);
                 return code; 
                 //Do logic for boolean in itemLogic
 			}
@@ -173,7 +182,7 @@ namespace GroupProject.Items
         /// <param name="Code">Item's Code</param>
         /// <param name="Desc">Item's Description</param>
         /// <param name="Cost">Item's Cost</param>
-        public void UpdateItem(char Code, string Desc, string Cost)
+        public void UpdateItem(string Code, string Desc, string Cost)
         {
             try
             {
@@ -226,7 +235,7 @@ namespace GroupProject.Items
                 //Cmd = new OleDbCommand("SELECT DISTINCT InvoiceNum FROM LineItems WHERE ItemCode = @ItemCode");
                 //Cmd.Parameters.Add("@ItemCode", OleDbType.WChar).Value = SelectedItem.Code;
 
-                var sql = "SELECT DISTINCT InvoiceNum FROM LineItems WHERE ItemCode = '"+ SelectedItem.ItemCode+"'";
+                var sql = "SELECT DISTINCT InvoiceNum FROM LineItems WHERE ItemCode = '"+ SelectedItem.Code+"'";
 
                 int retVal = 0;
 
