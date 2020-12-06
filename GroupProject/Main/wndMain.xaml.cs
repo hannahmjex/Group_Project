@@ -35,7 +35,7 @@ namespace GroupProject
 		/// <summary>
 		/// list of added items
 		/// </summary>
-		List<string> addedItems;
+		List<LineItem> addedLineItems;
 
 		/// <summary>
 		/// boolean to tell if the invoice is being edited
@@ -70,9 +70,8 @@ namespace GroupProject
 				wndSearch = new SearchWindow(this);
 				mainLogic = new clsMainLogic();
 				exceptionHandling = new clsExceptionHandling();
-				addedItems = new List<string>();
-				itemInfo = new List<string>();
-				addedItems = new List<string>();
+                addedLineItems = new List<LineItem>();
+                itemInfo = new List<string>();
 				saved = true;
 				total = 0;
 				FillItemSelectionBox();
@@ -254,11 +253,19 @@ namespace GroupProject
 				var itemDescription = cboItemSelection.SelectedItem.ToString();
 				itemInfo = mainLogic.GetItemRow(itemDescription);
 
-				//add items to data grid
-				dgInvoice.Items.Add(new Item(itemInfo[0], itemInfo[1], itemInfo[2]));
+                //Instantiate new local Item variable
+                var newItem = new Item(itemInfo[0], itemInfo[1], itemInfo[2]);
+
+                //If there are existing line items create a new highest line item number. If there aren't any line items set the line item number to 1
+                var lineItemNumber = (addedLineItems.Any()) ? (addedLineItems.Max(x => x.LineItemNumber) + 1) : 1;
+
+                var newLineItem = new LineItem(lineItemNumber, newItem.Code);
+
+                //add items to data grid
+                dgInvoice.Items.Add(newItem);
 
 				//add description to added items
-				addedItems.Add(itemInfo.ToString());
+				addedLineItems.Add(newLineItem);
 
 				//Update total cost 
 				UpdateTotalCost(true);
@@ -315,11 +322,15 @@ namespace GroupProject
 					{
 						//save invoice
 						mainLogic.SaveInvoice(invoiceDate.SelectedDate.ToString(), costTextbox.Text);
-						//set invoice number
-						invoiceNum.Content = mainLogic.GetInvoiceNumber();
 
-						//add to items to line items
-						mainLogic.InsertLineItems(addedItems);
+                        //Get invoice Number
+                        var invoiceNumber = mainLogic.GetInvoiceNumber();
+
+                        //set invoice number
+                        invoiceNum.Content = invoiceNumber;
+
+                        //add to items to line items
+                        mainLogic.InsertLineItems(invoiceNumber, addedLineItems);
 
 						//change invoice to read only mode
 						dgInvoice.IsEnabled = false;

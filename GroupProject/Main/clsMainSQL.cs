@@ -156,18 +156,20 @@ namespace GroupProject
 			}
 		}
 
-		/// <summary>
-		/// Query to add an Item to LineItems.
-		/// </summary>
-		/// <param name="invoiceNum"></param>
-		/// <param name="lineItemNum"></param>
-		/// <param name="itemCode"></param>
-		/// <returns></returns>
-		public void InsertLineItems(string invoiceNum, string lineItemNum, string itemCode)
+        /// <summary>
+        /// Query to add an Item to LineItems.
+        /// </summary>
+        /// <param name="lineItem"></param>
+        public void InsertLineItems(LineItem lineItem)
 		{
 			try
 			{
-				string sql = "INSERT INTO LineItems (InvoiceNum, LineitemNum, ItemCode) VALUES (" + invoiceNum + ", " + lineItemNum + ", " +itemCode +" )";
+                // Set local variables
+                var invoiceNum = (lineItem.InvoiceNumber != null) ? lineItem.InvoiceNumber : throw new Exception("Internal Error: cannot insert new line item without invoice number.");
+                var lineItemNum = lineItem.LineItemNumber;
+                var itemCode = lineItem.ItemCode;
+
+                string sql = "INSERT INTO LineItems (InvoiceNum, LineitemNum, ItemCode) VALUES ('"+invoiceNum+"', '"+lineItemNum+"', '"+itemCode+"')";
 				db.ExecuteNonQuery(sql);
 			}
 			catch (Exception ex)

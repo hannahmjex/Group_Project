@@ -7,10 +7,10 @@ using System.Reflection;
 
 namespace GroupProject
 {
-	/// <summary>
-	/// All logic for adding, deleting, saving, editing invoices/items will live here
-	/// </summary>
-	public class clsMainLogic
+    /// <summary>
+    /// All logic for adding, deleting, saving, editing invoices/items will live here
+    /// </summary>
+    public class clsMainLogic
 	{
 		/// <summary>
 		/// main sql class
@@ -167,32 +167,16 @@ namespace GroupProject
 		/// returns an ObservableCollection of all items
 		/// </summary>
 		/// <returns></returns>
-		public void InsertLineItems(List<string> addedItems)
+		public void InsertLineItems(string invoiceNumber, List<LineItem> addedLineItems)
 		{
 			try
 			{
-				//get invoice number
-				string invoiceNum = GetInvoiceNumber();
-				//get lineItemNumber
-				ObservableCollection<Item> lineNumber = GetItemsForInvoice(invoiceNum);
-				
+				foreach(var lineItem in addedLineItems)
+                {
+                    lineItem.AddInvoiceNumber(invoiceNumber);
 
-				//somehow get the line item code
-				for (int i = 0; i < addedItems.Count; i++)
-				{
-					DataSet Codes = mainSQL.GetItemCode(addedItems[i]);
-					List<string> lineItem = new List<string>();
-
-					//extract item code
-					for (int j = 0; j < Codes.Tables[0].Columns.Count; i++)
-					{
-						lineItem.Add(Codes.Tables[0].Rows[0][i].ToString());
-					}
-					string itemCode = lineItem[1];
-
-					//insert in line number
-					mainSQL.InsertLineItems(invoiceNum, lineNumber.ToString(), itemCode);
-				}
+                    mainSQL.InsertLineItems(lineItem);
+                }
 			}
 			catch (Exception ex)
 			{
