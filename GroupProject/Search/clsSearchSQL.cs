@@ -51,8 +51,8 @@ namespace GroupProject.Search
                 {
                     // Grab data from their columns for each row
                     int invoiceNum = int.Parse(ds.Tables[0].Rows[i][0].ToString());
-                    string invoiceDate = ds.Tables[0].Rows[i][1].ToString();
-                    string totalCost = ds.Tables[0].Rows[i][2].ToString();
+                    DateTime invoiceDate = DateTime.Parse(ds.Tables[0].Rows[i][1].ToString());
+                    int totalCost = (int)ds.Tables[0].Rows[i][2];
 
                     // Create new local invoice object
                     Invoice invoice = new Invoice(invoiceNum, invoiceDate, totalCost);
@@ -135,8 +135,8 @@ namespace GroupProject.Search
                     Invoice invoice = new Invoice
                         (
                             invoiceNum: int.Parse(ds.Tables[0].Rows[i][0].ToString()),
-                            invoiceDate: ds.Tables[0].Rows[i][1].ToString(),
-                            totalCost: ds.Tables[0].Rows[i][2].ToString()
+                            invoiceDate: DateTime.Parse(ds.Tables[0].Rows[i][1].ToString()),
+                            totalCost: (int)ds.Tables[0].Rows[i][2]
                         );
 
                     // Add newly created invoice object to local collection of invoices.

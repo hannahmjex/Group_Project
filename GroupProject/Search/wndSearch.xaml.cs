@@ -57,8 +57,8 @@ namespace GroupProject
                 //Fill search window UI components with invoice information 
                 dataGridInvoices.ItemsSource = allInvoices;
                 comboBoxInvoiceNum.ItemsSource = allInvoices.Select(x => x.InvoiceNum).Distinct();
-                comboBoxInvoiceDate.ItemsSource = allInvoices.Select(x => x.InvoiceDate).Distinct();
-                comboBoxInvoiceTotalCharge.ItemsSource = allInvoices.Select(x => x.TotalCost).Distinct();
+                comboBoxInvoiceDate.ItemsSource = allInvoices.OrderByDescending(x => x.InvoiceDate).Select(x => x.InvoiceDate).Distinct();
+                comboBoxInvoiceTotalCharge.ItemsSource = allInvoices.OrderBy(x => x.TotalCost).Select(x => x.TotalCost).Distinct();
 
                 comboBoxInvoiceNum.SelectedItem = null;
                 comboBoxInvoiceDate.SelectedItem = null;

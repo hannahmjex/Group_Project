@@ -337,7 +337,7 @@ namespace GroupProject
             ExistingInvoiceInContext = invoice;
 
             //Set the date
-            invoiceDate.SelectedDate = DateTime.Parse(invoice.InvoiceDate);
+            invoiceDate.SelectedDate = /*DateTime.Parse(invoice.InvoiceDate)*/invoice.InvoiceDate;
 
             //Set the invoice number
             invoiceNum.Content = invoice.InvoiceNum;
@@ -411,7 +411,7 @@ namespace GroupProject
 				else
 				{
                     //Get invoice number
-                    var invoiceNumber = mainLogic.GetInvoiceNumber();
+                    var invoiceNumber = (ExistingInvoiceInContext != null) ? ExistingInvoiceInContext.InvoiceNum.ToString() : mainLogic.GetInvoiceNumber();
 
                     //get all unsaved line items
                     var unsavedLineItems = addedLineItems.Where(x => x.InvoiceNumber == null).ToList();
