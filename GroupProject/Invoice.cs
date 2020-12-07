@@ -14,7 +14,7 @@ namespace GroupProject
         /// <param name="invoiceNum"></param>
         /// <param name="invoiceDate"></param>
         /// <param name="totalCost"></param>
-        public Invoice(int invoiceNum, /*string*/DateTime invoiceDate, /*string*/int totalCost)
+        public Invoice(int invoiceNum, DateTime invoiceDate, int totalCost)
         {
             try
             {
@@ -35,13 +35,13 @@ namespace GroupProject
         public int InvoiceNum { get; set; }
 
         /// <summary>
-        /// String Date on the invoice object
+        ///  Date on the invoice object
         /// </summary>
         public DateTime InvoiceDate { get; set; }
 
         /// <summary>
-        /// String of the total cost of the invoice
+        /// int of the total cost of the invoice
         /// </summary>
-        public /*string*/int TotalCost { get; set; }
+        public int TotalCost { get; set; }
     }
 }

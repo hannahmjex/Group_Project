@@ -337,7 +337,7 @@ namespace GroupProject
             ExistingInvoiceInContext = invoice;
 
             //Set the date
-            invoiceDate.SelectedDate = /*DateTime.Parse(invoice.InvoiceDate)*/invoice.InvoiceDate;
+            invoiceDate.SelectedDate = invoice.InvoiceDate;
 
             //Set the invoice number
             invoiceNum.Content = invoice.InvoiceNum;
@@ -546,26 +546,6 @@ namespace GroupProject
 			{
                 total = addedItems.Sum(x => int.Parse(x.Cost));
                 totalTextbox.Text = total.ToString();
-				////if jtem was added
-				//if (added)
-				//{
-				//	//add most recently added item
-				//	total += Int32.Parse(itemInfo[2]);
-				//}
-				////if item was removed
-				//else
-				//{
-				//	total -= Int32.Parse(itemInfo[2]);
-				//}
-				////make sure total doesn't go less than 0
-				//if (total < 0)
-				//{
-				//	totalTextbox.Text = 0.ToString();
-				//}
-				//else
-				//{
-				//	totalTextbox.Text = total.ToString();
-				//}
 			}
 			catch (Exception ex)
 			{
