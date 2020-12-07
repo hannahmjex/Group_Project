@@ -96,12 +96,11 @@ namespace GroupProject.Items
 			try
 			{
 				string sql = "SELECT ItemCode FROM ItemDesc WHERE ItemCode = @Code";
+
 				return db.ExecuteSQLStatement(sql, ref returnValues, (OleDbCommand cmd) =>
 				{
 					cmd.Parameters.AddWithValue("@Code", Code);
 				});
-
-				//Do logic for boolean in itemLogic
 			}
 			catch (Exception ex)
 			{
@@ -151,40 +150,15 @@ namespace GroupProject.Items
 		/// <summary>
 		/// Updates an Item
 		/// </summary>
-		/// <param name="Code">Item's Code</param>
-		/// <param name="Desc">Item's Description</param>
-		/// <param name="Cost">Item's Cost</param>
-		public void UpdateItem(string Code, string Desc, string Cost)
+		/// <param name="currentItemCode">Item's Code</param>
+		/// <param name="desc">Item's Description</param>
+		/// <param name="cost">Item's Cost</param>
+		public void UpdateItem(string code, string desc, string cost)
 		{
 			try
 			{
-				//string sql = @"UPDATE ItemDesc SET ItemDesc = '"+Desc+"' AND Cost = '"+Cost+"' AND ItemCode = '"+Code.ToString()+"' WHERE ItemCode = '"+Code.ToString()+"'";
-
-				var code = Code.ToString();
-
-				var sql = @"UPDATE ItemDesc SET ItemDesc = '" + Desc + "', Cost = '" + Cost + "' WHERE ItemCode = '" + Code + "'";
-				// Cmd = new OleDbCommand("UPDATE ItemDesc SET ");
-
-				////If a new description is provided then add it to the SET clause
-				//if (Desc != null)
-				//{
-				//    Cmd.CommandText += "ItemDesc = '" + Desc + "'";
-				//}
-				//if (Cost != null)
-				//{
-				//    //If a new cost is provided as well as desc then add a comma, otherwise just add cost to SET clause
-				//    if (Desc != null)
-				//    {
-				//        Cmd.CommandText += ", Cost = '" + Cost + "'";
-				//    }
-				//    else
-				//    {
-				//        Cmd.CommandText += "Cost = '" + Cost + "'";
-				//    }
-				//}
-				//Cmd.CommandText += " WHERE ItemCode = '" + Code + "'";
-
-				//db.ExecuteNonQuery(Cmd);
+				var sql = @"UPDATE ItemDesc SET ItemDesc = '" + desc + "', Cost = '" + cost + "' WHERE ItemCode = '" + code + "'";
+				
 				db.ExecuteNonQuery(sql);
 			}
 			catch (Exception ex)

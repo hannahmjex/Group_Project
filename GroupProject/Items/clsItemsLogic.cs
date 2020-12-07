@@ -60,6 +60,10 @@ namespace GroupProject.Items
             }
         }
 
+        /// <summary>
+        /// Goes to the database and gets all items
+        /// </summary>
+        /// <returns></returns>
         public ObservableCollection<Item> GetAllItems()
         {
             try
@@ -75,17 +79,17 @@ namespace GroupProject.Items
         /// <summary>
         /// Checking the uniqueness of the Item Code
         /// </summary>
-        /// <param name="Code">Item's Code</param>
+        /// <param name="codeCandidate">Item's Code</param>
         /// <returns>boolean representing uniqueness</returns>
-        public bool CheckCodeValidity(string Code)
+        public bool IsValidItemCode(string codeCandidate)
         {
             try
             {
                 //get ds with parameter code
-                var code = SQL.CheckUniqueCode(Code);
+                var itemDataSet = SQL.CheckUniqueCode(codeCandidate);
 
                 //if there is nothing in the ds, then the code can be used
-                if (code.Tables[0].Rows == null)
+                if (itemDataSet.Tables[0].Rows.Count == 0)
 				{
                     return true;
 				}
@@ -134,7 +138,7 @@ namespace GroupProject.Items
         {
             try
             {
-                SQL.DeleteItem(((Item)SelectedItem).Code/*Code*/.ToString());
+                SQL.DeleteItem(((Item)SelectedItem).Code.ToString());
                 _Items.Remove((Item)SelectedItem);
             }
             catch (Exception ex)
@@ -147,20 +151,14 @@ namespace GroupProject.Items
         /// <summary>
         /// Update provided item
         /// </summary>
-        /// <param name="SelectedItem">Item to be updated</param>
-        /// <param name="Desc">Item's Description</param>
-        /// <param name="Cost">Item's Cost</param>
-        public void UpdateItem(object SelectedItem, string Desc, string Cost)
+        /// <param name="item"></param>
+        /// <param name="Desc"></param>
+        /// <param name="Cost"></param>
+        public void UpdateItem(Item item, string Desc, string Cost)
         {
             try
             {
-                var item = (Item)SelectedItem;
-
-                //If the Description or Cost is not changed pass in null
-                //SQL.UpdateItem(((Item)SelectedItem).Code, ((Item)SelectedItem).Description != Desc ? Desc : null, ((Item)SelectedItem).Cost.ToString() != Cost ? Cost : null);
-
-                // this might be wrong
-                SQL.UpdateItem(SelectedItem.ToString(), Desc, Cost);
+                SQL.UpdateItem(item.Code, Desc, Cost);
             }
             catch (Exception ex)
             {

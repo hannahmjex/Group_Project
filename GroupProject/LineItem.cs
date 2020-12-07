@@ -33,7 +33,7 @@ namespace GroupProject
         /// Sets the InvoiceNumber property of the line item
         /// </summary>
         /// <param name="invoiceNumber"></param>
-        public void AddInvoiceNumber(string invoiceNumber)
+        public void SetInvoiceNumber(string invoiceNumber)
         {
             try
             {

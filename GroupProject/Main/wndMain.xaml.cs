@@ -1,6 +1,7 @@
 ﻿using GroupProject.Main;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -33,14 +34,19 @@ namespace GroupProject
 		clsExceptionHandling exceptionHandling;
 
 		/// <summary>
-		/// list of added items
+		/// list of added line items
 		/// </summary>
 		List<LineItem> addedLineItems;
 
-		/// <summary>
-		/// boolean to tell if the invoice is being edited
+        /// <summary>
+		/// list of added items
 		/// </summary>
-		bool editing;
+		ObservableCollection<Item> addedItems;
+
+        /// <summary>
+        /// boolean to tell if the invoice is being edited
+        /// </summary>
+        bool editing;
 
 		/// <summary>
 		/// bools to tell if the invoice has been saved
@@ -57,10 +63,15 @@ namespace GroupProject
 		/// </summary>
 		int total;
 
-		/// <summary>
-		/// Constructor for Main Window
-		/// </summary>
-		public MainWindow()
+        /// <summary>
+        /// If an invoice was selected from the search page this property will have value.
+        /// </summary>
+        public Invoice ExistingInvoiceInContext { get; private set; }
+
+        /// <summary>
+        /// Constructor for Main Window
+        /// </summary>
+        public MainWindow()
 		{
 			try
 			{
@@ -70,6 +81,7 @@ namespace GroupProject
 				wndSearch = new SearchWindow(this);
 				mainLogic = new clsMainLogic();
 				exceptionHandling = new clsExceptionHandling();
+                addedItems = new ObservableCollection<Item>();
                 addedLineItems = new List<LineItem>();
                 itemInfo = new List<string>();
 				saved = true;
@@ -93,20 +105,38 @@ namespace GroupProject
 		{
 			try
 			{
-				//if there are items in the datagrid
-				if (dgInvoice.Items.Count != 0)
-				{
-					dgInvoice.Items.Clear();
-				}
-				//enable other features
-				SetIsEnabled(true);
+                
+                dgInvoice.ItemsSource = new ObservableCollection<Item>();
+
+                // Set invoice in context to null just in case.
+                ExistingInvoiceInContext = null;
+
+                // Set list of added items to empty just in case
+                addedItems = new ObservableCollection<Item>();
+
+                // Set list of added lineItems to empty just in case
+                addedLineItems = new List<LineItem>();
+
+                //enable other features
+                SetIsEnabled(true);
 
 				//set total text box to 0
 				total = 0;
 
 				//set saved to false
 				saved = false;
-			}
+
+                //Ensure editing is false
+                editing = false;
+
+                //reset features
+                invoiceDate.SelectedDate = null;
+                cboItemSelection.SelectedItem = null;
+                costTextbox.Text = "";
+                total = 0;
+                totalTextbox.Text = "";
+                invoiceNum.Content = "";
+            }
 			catch (Exception ex)
 			{
 				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
@@ -147,11 +177,25 @@ namespace GroupProject
 		{
 			try
 			{
+                var item = (Item)dgInvoice.SelectedItem;
+
 				//Make sure the current row is not null
-				if (dgInvoice.SelectedItems != null)
+				if (item != null)
 				{
-					//remove selected item
-					dgInvoice.Items.Remove(dgInvoice.SelectedItems[0]);
+                    //Get the first line item with the same invoice number and item code
+                    var lineItem = addedLineItems.Where(x => x.ItemCode == item.Code).FirstOrDefault();
+
+                    if (ExistingInvoiceInContext != null && lineItem.InvoiceNumber != null)
+                    {
+                        var invoiceNumber = ExistingInvoiceInContext.InvoiceNum.ToString();
+                        mainLogic.DeleteLineItemsForInvoice(invoiceNumber, lineItem);
+                    }
+
+                    //remove selected item
+                    addedLineItems.Remove(lineItem);
+                    addedItems.Remove(item);
+                    dgInvoice.ItemsSource = addedItems;
+
 					UpdateTotalCost(false);
 				}
 			}
@@ -261,11 +305,15 @@ namespace GroupProject
 
                 var newLineItem = new LineItem(lineItemNumber, newItem.Code);
 
-                //add items to data grid
-                dgInvoice.Items.Add(newItem);
+                //add entry to addedLineItems
+                addedLineItems.Add(newLineItem);
 
-				//add description to added items
-				addedLineItems.Add(newLineItem);
+                //add entry to addedItems
+                addedItems.Add(newItem);
+
+                //add items to data grid
+                //dgInvoice.Items.Add(newItem);
+                dgInvoice.ItemsSource = addedItems;
 
 				//Update total cost 
 				UpdateTotalCost(true);
@@ -280,15 +328,35 @@ namespace GroupProject
 		/// <summary>
 		/// Shows items from selected invoice from wndSearch
 		/// </summary>
-		/// <param name="invoiceNum"></param>
-		public void ShowSelectedInvoiceItems(int invoiceNum)
+		/// <param name="invoice"></param>
+		public void ShowSelectedInvoiceItems(Invoice invoice)
 		{
-			var items = mainLogic.GetItemsForInvoice(invoiceNum.ToString());
+			var items = mainLogic.GetItemsForInvoice(invoice.InvoiceNum.ToString());
+
+            //Set the main window's invoice in context to the selected invoice from the search screen;
+            ExistingInvoiceInContext = invoice;
+
+            //Set the date
+            invoiceDate.SelectedDate = DateTime.Parse(invoice.InvoiceDate);
+
+            //Set the invoice number
+            invoiceNum.Content = invoice.InvoiceNum;
+
+            //Set total cost from selected invoice items
+            totalTextbox.Text = items.Sum(x => int.Parse(x.Cost)).ToString();
 
 			SetIsEnabled(true);
 			editButton.IsEnabled = true;
 			deleteButton.IsEnabled = true;
 			dgInvoice.IsEnabled = false;
+
+            //Ensure editing
+            editing = true;
+
+            List<LineItem> lineItems = mainLogic.GetLineItemsForInvoice(invoice.InvoiceNum);
+
+            addedItems = items;
+            addedLineItems = lineItems;
 
 			dgInvoice.ItemsSource = items;
 		}
@@ -342,8 +410,18 @@ namespace GroupProject
 				//if the data is being edited
 				else
 				{
+                    //Get invoice number
+                    var invoiceNumber = mainLogic.GetInvoiceNumber();
+
+                    //get all unsaved line items
+                    var unsavedLineItems = addedLineItems.Where(x => x.InvoiceNumber == null).ToList();
+
+                    //insertLineItems
+                    mainLogic.InsertLineItems(invoiceNumber, unsavedLineItems);
+
 					//update invoice
-					mainLogic.UpdateInvoice(costTextbox.Text);
+					mainLogic.UpdateInvoice(totalTextbox.Text);
+
 					//end editing
 					editing = false;
 				}
@@ -367,7 +445,11 @@ namespace GroupProject
 		{
 			try
 			{
-				dgInvoice.Items.Clear();
+                //Reset form and props
+                addedItems = new ObservableCollection<Item>();
+                addedLineItems = new List<LineItem>();
+                dgInvoice.ItemsSource = new ObservableCollection<Item>();
+
 				//call sql statement to delete invoice
 				mainLogic.DeleteInvoice();
 
@@ -383,7 +465,8 @@ namespace GroupProject
 				invoiceDate.SelectedDate = null;
 				cboItemSelection.SelectedItem = "";
 				costTextbox.Text = "";
-
+                total = 0;
+                totalTextbox.Text = "";
 			}
 			catch (Exception ex)
 			{
@@ -461,26 +544,28 @@ namespace GroupProject
 		{
 			try
 			{
-				//if jtem was added
-				if (added)
-				{
-					//add most recently added item
-					total += Int32.Parse(itemInfo[2]);
-				}
-				//if item was removed
-				else
-				{
-					total -= Int32.Parse(itemInfo[2]);
-				}
-				//make sure total doesn't go less than 0
-				if (total < 0)
-				{
-					totalTextbox.Text = 0.ToString();
-				}
-				else
-				{
-					totalTextbox.Text = total.ToString();
-				}
+                total = addedItems.Sum(x => int.Parse(x.Cost));
+                totalTextbox.Text = total.ToString();
+				////if jtem was added
+				//if (added)
+				//{
+				//	//add most recently added item
+				//	total += Int32.Parse(itemInfo[2]);
+				//}
+				////if item was removed
+				//else
+				//{
+				//	total -= Int32.Parse(itemInfo[2]);
+				//}
+				////make sure total doesn't go less than 0
+				//if (total < 0)
+				//{
+				//	totalTextbox.Text = 0.ToString();
+				//}
+				//else
+				//{
+				//	totalTextbox.Text = total.ToString();
+				//}
 			}
 			catch (Exception ex)
 			{

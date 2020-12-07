@@ -1,5 +1,6 @@
 ﻿using GroupProject.Main;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.OleDb;
@@ -179,12 +180,53 @@ namespace GroupProject
 			}
 		}
 
-		/// <summary>
-		/// gets item 
+        /// <summary>
+		/// Query to get line items for the specified invoice from the database
 		/// </summary>
-		/// <param name="itemCode"></param>
+		/// <param name="invoiceNumber"></param>
 		/// <returns></returns>
-		public DataSet GetItemCode(string itemDesc)
+        internal List<LineItem> GetLineItemsForInvoice(int invoiceNum)
+        {
+            try
+            {
+                // Create local invoices collection
+                List<LineItem> lineItems = new List<LineItem>();
+
+                //var sql = $"SELECT LineItems.ItemCode, ItemDesc.ItemDesc, ItemDesc.Cost FROM LineItems, ItemDesc Where LineItems.ItemCode = ItemDesc.ItemCode And LineItems.InvoiceNum = " + invoiceNumber;
+                var sql = $"SELECT * FROM LineItems WHERE InvoiceNum = " + invoiceNum;
+
+                var ds = db.ExecuteSQLStatement(sql, ref returnValues);
+
+                // Iterate over rows
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    // Grab data from their columns for each row
+                    string invoiceNumber = ds.Tables[0].Rows[i][0].ToString();
+                    string lineItemNum = ds.Tables[0].Rows[i][1].ToString();
+                    string itemCode = ds.Tables[0].Rows[i][2].ToString();
+
+                    // Create new local lineItem object
+                    LineItem lineItem = new LineItem(int.Parse(lineItemNum), itemCode);
+                    lineItem.SetInvoiceNumber(invoiceNumber);
+
+                    // Add newly created lineItem object to local collection of lineItems.
+                    lineItems.Add(lineItem);
+                }
+                return lineItems;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." +
+                                                       MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// gets item 
+        /// </summary>
+        /// <param name="itemCode"></param>
+        /// <returns></returns>
+        public DataSet GetItemCode(string itemDesc)
 		{
 			try
 			{
@@ -261,11 +303,11 @@ namespace GroupProject
 		/// </summary>
 		/// <param name="invoiceNum"></param>
 		/// <returns></returns>
-		public void DeleteLineItems(string invoiceNum)
+		public void DeleteLineItems(string invoiceNum, int? lineItemNum = null)
 		{
 			try
 			{
-				string sql = "DELETE FROM LineItmes WHERE InvoiceNum = " + invoiceNum;
+                string sql = (lineItemNum == null) ? "DELETE FROM LineItems WHERE InvoiceNum = " + invoiceNum : "DELETE FROM LineItems WHERE InvoiceNum = "+invoiceNum+" AND LineItemNum = "+lineItemNum;
 				db.ExecuteNonQuery(sql);
 			}
 			catch (Exception ex)
@@ -284,7 +326,7 @@ namespace GroupProject
 		{
 			try
 			{
-				string sql = "DELETE FROM Invoices WHERE InvoiceNum = " +invoiceNum;
+                string sql = "DELETE FROM Invoices WHERE InvoiceNum = "+invoiceNum;
 				db.ExecuteNonQuery(sql);
 			}
 			catch (Exception ex)

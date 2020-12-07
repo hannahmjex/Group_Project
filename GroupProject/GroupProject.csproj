@@ -73,7 +73,7 @@
     <Compile Include="LineItem.cs" />
     <Compile Include="Search\clsSearchLogic.cs" />
     <Compile Include="Search\clsSearchSQL.cs" />
-    <Compile Include="Search\Invoice.cs" />
+    <Compile Include="Invoice.cs" />
     <Compile Include="Search\wndSearch.xaml.cs">
       <DependentUpon>wndSearch.xaml</DependentUpon>
     </Compile>
@@ -141,7 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Invoice.mdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

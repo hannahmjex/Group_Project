@@ -121,6 +121,7 @@ namespace GroupProject
 			{
 				//get invoice number
 				string invoiceNum = GetInvoiceNumber();
+                
 				mainSQL.UpdateInvoices(invoiceNum, totalCost);
 			}
 			catch (Exception ex)
@@ -138,8 +139,8 @@ namespace GroupProject
 			{
 				//get invoice number
 				string invoiceNum = GetInvoiceNumber();
-				mainSQL.DeleteInvoices(invoiceNum);
-				mainSQL.DeleteLineItems(invoiceNum);
+                mainSQL.DeleteLineItems(invoiceNum);
+                mainSQL.DeleteInvoices(invoiceNum);
 			}
 			catch (Exception ex)
 			{
@@ -164,7 +165,7 @@ namespace GroupProject
 		}
 
 		/// <summary>
-		/// returns an ObservableCollection of all items
+		/// inserts line items for invoice
 		/// </summary>
 		/// <returns></returns>
 		public void InsertLineItems(string invoiceNumber, List<LineItem> addedLineItems)
@@ -173,7 +174,7 @@ namespace GroupProject
 			{
 				foreach(var lineItem in addedLineItems)
                 {
-                    lineItem.AddInvoiceNumber(invoiceNumber);
+                    lineItem.SetInvoiceNumber(invoiceNumber);
 
                     mainSQL.InsertLineItems(lineItem);
                 }
@@ -183,6 +184,40 @@ namespace GroupProject
 				throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
 			}
 		}
-	}
+
+        /// <summary>
+        /// gets a list of line items for the specified invoice
+        /// </summary>
+        /// <param name="invoice"></param>
+        /// <returns></returns>
+        public List<LineItem> GetLineItemsForInvoice(int invoiceNum)
+        {
+            try
+            {
+                return mainSQL.GetLineItemsForInvoice(invoiceNum);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Deletes a single line item
+        /// </summary>
+        /// <param name="invoiceNumber"></param>
+        /// <param name="lineItem"></param>
+        internal void DeleteLineItemsForInvoice(string invoiceNumber, LineItem lineItem)
+        {
+            try
+            {
+                mainSQL.DeleteLineItems(invoiceNumber, lineItem.LineItemNumber);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(MethodInfo.GetCurrentMethod().DeclaringType.Name + "." + MethodInfo.GetCurrentMethod().Name + " -> " + ex.Message);
+            }
+        }
+    }
 }
 

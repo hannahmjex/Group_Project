@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace GroupProject.Search
+namespace GroupProject
 {
     /// <summary>
     /// Class that represents an Invoice object

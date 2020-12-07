@@ -14,7 +14,7 @@
 			</MenuItem>
 		</Menu>
 		<Label Content="Invoice Number:" Margin="37,318,652,64.5" RenderTransformOrigin="0.51,0.611"/>
-		<DataGrid x:Name="dgInvoice" Margin="260,86,193,41.5" SelectionChanged="dgInvoice_SelectionChanged" DataContext="items">
+		<DataGrid x:Name="dgInvoice" Margin="260,86,193,41.5" SelectionChanged="dgInvoice_SelectionChanged" DataContext="items" CanUserAddRows="False">
 			<DataGrid.Columns>
 				<DataGridTextColumn x:Name="colCode" Header="Code" Binding="{Binding Path=Code}" Width="70"></DataGridTextColumn>
 				<DataGridTextColumn x:Name="colDesc" Header="Description" Binding="{Binding Path=Description}" Width="200"></DataGridTextColumn>

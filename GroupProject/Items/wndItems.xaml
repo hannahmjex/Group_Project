@@ -19,7 +19,7 @@
         <DataGrid x:Name="ItemDataGrid" ColumnWidth="*" HorizontalAlignment="Left" Height="333" Margin="214,28,0,0" VerticalAlignment="Top" Width="536" SelectionChanged="ItemDataGrid_SelectionChanged" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" VerticalScrollBarVisibility="Auto"/>
         <Label x:Name="RowSelectionErrorLabel" Content="Select a data row to update or delete" HorizontalAlignment="Left" Margin="388,366,0,0" Foreground="Red" FontWeight="Bold" Visibility="Hidden" VerticalAlignment="Top"/>
         <TextBlock x:Name="DeleteItemErrorTextBlock" HorizontalAlignment="Left" Margin="30,358,0,0" TextWrapping="Wrap" Text="Cannot delete this item, it's included in an existing invoice" VerticalAlignment="Top" Foreground="Red" FontWeight="Bold" Height="39" Width="184" Visibility="Hidden"/>
-        <TextBox x:Name="ItemCodeBox" HorizontalAlignment="Left" Height="23" Margin="52,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="-0.343,-0.502"/>
+        <TextBox x:Name="ItemCodeBox" HorizontalAlignment="Left" Height="23" Margin="52,63,0,0" MaxLength="4" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" RenderTransformOrigin="-0.343,-0.502"/>
         <Label x:Name="CodeLabel" Content="Item Code" HorizontalAlignment="Left" Margin="52,28,0,0" VerticalAlignment="Top" Width="70"/>
         <Button x:Name="SaveItemBtn" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="71,351,0,0" Click="SaveItemBtn_Click"/>
     </Grid>

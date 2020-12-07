@@ -1,4 +1,5 @@
-﻿using GroupProject.Search;
+﻿using GroupProject.Main;
+using GroupProject.Search;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -177,11 +178,11 @@ namespace GroupProject
             try
             {
                 //clear out main window datagrid
-                MainWindow.dgInvoice.Items.Clear();
+                MainWindow.dgInvoice.ItemsSource = new ObservableCollection<Item>();
 
                 var invoice = (Invoice)dataGridInvoices.SelectedItem;
 
-                MainWindow.ShowSelectedInvoiceItems(invoice.InvoiceNum);
+                MainWindow.ShowSelectedInvoiceItems(invoice);
 
                 this.Hide();
             }

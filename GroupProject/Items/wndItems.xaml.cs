@@ -177,13 +177,17 @@ namespace GroupProject
                     return;
                 }
 
+                //Cast the selected item to an Item object local variable
+                var item = (Item)ItemDataGrid.SelectedItem;
+
                 //Check to see if the SelectedIndex is -1 indicating whether they are saving a new Item or just updating an Item
                 //Also check to see if either the cost or description was changed
-                if (ItemDataGrid.SelectedIndex != -1 && (((Item)ItemDataGrid.SelectedItem).Description/*Description*/ != ItemDescBox.Text || 
-                    ((Item)ItemDataGrid.SelectedItem).Cost/*Cost*/ != ItemCostBox.Text))
+                if (ItemDataGrid.SelectedIndex != -1 && (/*((Item)ItemDataGrid.SelectedItem)*/item.Description/*Description*/ != ItemDescBox.Text || 
+                    /*((Item)ItemDataGrid.SelectedItem)*/item.Cost/*Cost*/ != ItemCostBox.Text))
                 {
                     //Update the item
-                    IL.UpdateItem(ItemDataGrid.SelectedItem, ItemDescBox.Text, ItemCostBox.Text);
+                    IL.UpdateItem(/*ItemDataGrid.SelectedItem*/item, ItemDescBox.Text, ItemCostBox.Text);
+
                     //Remember the SelectedIndex
                     int index = ItemDataGrid.SelectedIndex;
                     //Refresh the list of Items to update the data grid with new values and reselect the updated Item
@@ -193,7 +197,7 @@ namespace GroupProject
                 else if (ItemDataGrid.SelectedIndex == -1)
                 {
                     //Check that the code doesn't already exist
-                    if (IL.CheckCodeValidity(ItemCodeBox.Text))
+                    if (IL.IsValidItemCode(ItemCodeBox.Text))
                     {
                         //Insert the new Item and return the inserted Item
                         Item insertedItem = IL.InsertNewItem(ItemCodeBox.Text, ItemDescBox.Text, ItemCostBox.Text);
